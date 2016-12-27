@@ -18,25 +18,27 @@ public class GameState_Meta extends GameState
 	InputButton m_pButtonLeft = null;
 	InputButton m_pButtonRight = null;
 	
+	String m_sLevelStart = null; // When not null, starts a new level
+	
 	Camera m_pCamera = null;
 	
 	@Override
-	void create(Camera i_pCamera, Resources i_pResources)
+	void create(Camera i_pCamera)
 	{
 		m_pCamera = i_pCamera;
 		// Create labels
-		m_pLabelMessage = new Label("Your daughter is ill.\nYour son is missing.", i_pResources.m_pStyleMetaLarge);
+		m_pLabelMessage = new Label("Your daughter is ill.\nYour son is missing.", Resources.m_pStyleMetaLarge);
 		m_pLabelMessage.setAlignment(Align.center);
 		m_pLabelMessage.setEllipsis(false);
 		m_pLabelMessage.setY(332.f);
 		m_pLabelMessage.setWidth(270.f);
 		
-		m_pLabelLeft = new Label("Heal her", i_pResources.m_pStyleMetaSmall);
+		m_pLabelLeft = new Label("Heal her", Resources.m_pStyleMetaSmall);
 		m_pLabelLeft.setAlignment(Align.center);
 		m_pLabelLeft.setEllipsis(false);
 		m_pLabelLeft.setY(108.f);
 		
-		m_pLabelRight = new Label("Find him", i_pResources.m_pStyleMetaSmall);
+		m_pLabelRight = new Label("Find him", Resources.m_pStyleMetaSmall);
 		m_pLabelRight.setAlignment(Align.center);
 		m_pLabelRight.setEllipsis(false);
 		m_pLabelRight.setY(108.f);
@@ -44,22 +46,22 @@ public class GameState_Meta extends GameState
 		// Create buttons
 		m_pButtonLeft = new InputButton(25, 128, 96, 96) { public void onPress() { onLeft(); } };
 		m_pButtonRight = new InputButton(149, 128, 96, 96) { public void onPress() { onRight(); } };
-		m_pButtonLeft.m_pSpriteSheetStates = i_pResources.m_pButtonMeta_Health;
-		m_pButtonRight.m_pSpriteSheetStates = i_pResources.m_pButtonMeta_Search;
+		m_pButtonLeft.m_pSpriteSheetStates = Resources.m_pButtonMeta_Health;
+		m_pButtonRight.m_pSpriteSheetStates = Resources.m_pButtonMeta_Search;
 	}
 
 	void onLeft()
 	{
-		System.out.println("Left Pressed");
+		m_sLevelStart = "level_heal_her";
 	}
 
 	void onRight()
 	{
-		System.out.println("Right Pressed");
+		m_sLevelStart = "level_heal_her";
 	}
 	
 	@Override
-	void render(SpriteBatch i_pBatch, ShapeRenderer i_pShapeRenderer, Resources i_pResources)
+	void render(SpriteBatch i_pBatch, ShapeRenderer i_pShapeRenderer)
 	{
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -85,6 +87,8 @@ public class GameState_Meta extends GameState
 	
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) 
 	{ 
+		if(!m_bActive) return false;
+		
 		// Unproject the touch coordinates
 		Vector3 vTouch = new Vector3(screenX, screenY, 0);
 		m_pCamera.unproject(vTouch);
@@ -98,6 +102,8 @@ public class GameState_Meta extends GameState
 	
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) 
 	{ 
+		if(!m_bActive) return false;
+		
 		// Unproject the touch coordinates
 		Vector3 vTouch = new Vector3(screenX, screenY, 0);
 		m_pCamera.unproject(vTouch);

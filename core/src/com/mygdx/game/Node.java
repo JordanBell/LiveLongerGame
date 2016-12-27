@@ -34,6 +34,7 @@ public class Node
 	Vector2 m_vPos;
 	boolean m_bConnectionsRendered;
 	List<Node> m_lpNeighbors = new ArrayList<Node>();
+	List<Door> m_lpNeighborDoors = new ArrayList<Door>();
 	String m_sID;
 
 	List<Connection> m_lpConnections = new ArrayList<Connection>();

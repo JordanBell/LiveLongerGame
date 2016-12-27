@@ -13,11 +13,13 @@ Legend:
 TODO:
 	- Establish node connections after parsing
 	- Render node items based on item enum type
+	- Determine player's start position after parsing
+	- Cannot pass through connection
 -->
 
 
 
-<level>
+<level startRoom="room1" startNode="1">
 	<room id="room1">
 		<n id="1" gridposx="3" gridposy="0">
 			<c>2</c>
@@ -31,7 +33,7 @@ TODO:
 			<c>door</c>
 		</n>
 
-		<d id="door" to="room2" pos="tm"/>
+		<d id="door" to="room2" node="1" pos="tm"/>
 	</room>
 
 	<room id="room2">
@@ -54,8 +56,8 @@ TODO:
 			<c>door_up</c>
 		</n>
 
-		<d id="door_down" to="room1" pos="bl"/>
-		<d id="door_up" to="room3" pos="tl"/>
+		<d id="door_down" to="room1" node="3" pos="bl"/>
+		<d id="door_up" to="room3" node="1" pos="tl"/>
 	</room>
 
 	<room id="room3">
@@ -101,6 +103,6 @@ TODO:
 			<covers>near_health</covers>
 		</melee>
 
-		<d id="door_down" to="room2" pos="br"/>
+		<d id="door_down" to="room2" node="4" pos="br"/>
 	</room>
 </level>

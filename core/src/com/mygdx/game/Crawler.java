@@ -13,6 +13,10 @@ public class Crawler
 	Node m_pToNode = null;
 	static final float sk_fTransitionSpeed = 2.f;
 	
+	// Transitions between rooms
+	Door m_pToDoor = null;
+	boolean m_bTransitionActive = false;
+	
 	// Anim/render data
 	SpriteSheetGDX m_pSpriteSheet = null;
 	int m_iAnimIndex = 0;
@@ -29,15 +33,40 @@ public class Crawler
 		m_pNode = null; // Detach ourselves
 	}
 	
+	void goToDoor(Door i_pToDoor)
+	{
+		if(i_pToDoor == null || i_pToDoor == m_pToDoor)
+		{
+			return;
+		}
+		
+		m_pToDoor = i_pToDoor;
+		m_vPosition = m_pNode.m_vPos.cpy(); // Set a node-independant position
+		m_pNode = null; // Detach ourselves
+	}
+	
 	void updateTravel()
 	{
+		if(m_bTransitionActive)
+		{
+			return;
+		}
+		
 		if(m_pToNode != null)
 		{
 			// Check if we've reached our destination
-			if(m_vPosition.dst(m_pToNode.m_vPos) <= 1.f)
+			if(m_vPosition.dst(m_pToNode.m_vPos) <= 8.f)
 			{
 				m_pNode = m_pToNode;
 				m_pToNode = null;
+			}
+		}
+		else if (m_pToDoor != null)
+		{
+			// Check if we've reached our destination
+			if(m_vPosition.dst(m_pToDoor.m_ePosition.toPositionCenter()) <= 8.f)
+			{
+				m_bTransitionActive = true;
 			}
 		}
 		
@@ -48,13 +77,32 @@ public class Crawler
 		}
 		else if(m_pToNode != null)
 		{
-			Vector2 vDirection = m_pToNode.m_vPos.cpy().sub(m_vPosition).nor();
-			m_vPosition.mulAdd(vDirection, sk_fTransitionSpeed);
+			if(Config.m_bTurbo)
+			{
+				m_vPosition = m_pToNode.m_vPos;
+			}
+			else
+			{
+				Vector2 vDirection = m_pToNode.m_vPos.cpy().sub(m_vPosition).nor();
+				m_vPosition.mulAdd(vDirection, sk_fTransitionSpeed);
+			}
+		}
+		else if(m_pToDoor != null)
+		{
+			if(Config.m_bTurbo)
+			{
+				m_vPosition = m_pToDoor.m_ePosition.toPositionCenter();
+			}
+			else
+			{
+				Vector2 vDirection = m_pToDoor.m_ePosition.toPositionCenter().sub(m_vPosition).nor();
+				m_vPosition.mulAdd(vDirection, Config.m_bTurbo ? sk_fTransitionSpeed * 10.f : sk_fTransitionSpeed);
+			}
 		}
 		else
 		{
 			// Error state
-			assert(false);
+			throw new RuntimeException("Error movement state");
 		}
 	}
 	
@@ -71,6 +119,6 @@ public class Crawler
 		
 		// Draw the crawler
 		TextureRegion pDrawRegion = m_pSpriteSheet.getRegion(m_iAnimIndex); 
-		i_pBatch.draw(pDrawRegion, m_vPosition.x - (pDrawRegion.getRegionWidth() * 0.5f), m_vPosition.y - (pDrawRegion.getRegionHeight() * 0.5f));
+		i_pBatch.draw(pDrawRegion, m_vPosition.x - (pDrawRegion.getRegionWidth() * 0.5f), m_vPosition.y);
 	}
 }
