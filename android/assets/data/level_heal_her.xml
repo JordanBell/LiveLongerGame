@@ -1,0 +1,106 @@
+<!-- 
+Legend:
+	n = node
+	c = connection
+	d = door
+	k = key
+	w = weapon
+	mi = mission item
+	npc = dialogue npc
+-->
+
+<!-- 
+TODO:
+	- Establish node connections after parsing
+	- Render node items based on item enum type
+-->
+
+
+
+<level>
+	<room id="room1">
+		<n id="1" gridposx="3" gridposy="0">
+			<c>2</c>
+		</n>
+		<n id="2" gridposx="3" gridposy="3">
+			<c>1</c>
+			<c>3</c>
+		</n>
+		<n id="3" gridposx="3" gridposy="6">
+			<c>2</c>
+			<c>door</c>
+		</n>
+
+		<d id="door" to="room2" pos="tm"/>
+	</room>
+
+	<room id="room2">
+		<n id="1" gridposx="1" gridposy="0">
+			<c>door_down</c>
+			<c>2</c>
+			<c lock="lock">4</c>
+		</n>
+		<n id="2" gridposx="5" gridposy="0">
+			<c>1</c>
+			<c>3</c>
+		</n>
+		<n id="3" gridposx="5" gridposy="5">
+			<c>2</c>
+			<k id="lock"/>
+		</n>
+
+		<n id="4" gridposx="1" gridposy="3">
+			<c>1</c>
+			<c>door_up</c>
+		</n>
+
+		<d id="door_down" to="room1" pos="bl"/>
+		<d id="door_up" to="room3" pos="tl"/>
+	</room>
+
+	<room id="room3">
+		<n id="1" gridposx="5" gridposy="0">
+			<c>door_down</c>
+			<c>2</c>
+		</n>
+		<n id="2" gridposx="5" gridposy="2">
+			<c>3</c>
+			<c>1</c>
+			<c>npc_doctor</c>
+		</n>
+		<n id="3" gridposx="3" gridposy="2">
+			<c>2</c>
+			<c>back_route_start</c>
+			<c>near_health</c>
+		</n>
+		<n id="near_health" gridposx="3" gridposy="5">
+			<c>3</c>
+			<c>back_route_end</c>
+			<c>health</c>
+		</n>
+		<n id="health" gridposx="3" gridposy="6">
+			<c>near_health</c>
+			<mi/>
+		</n>
+		<n id="back_route_start" gridposx="0" gridposy="2">
+			<c>3</c>
+			<c>back_route_end</c>
+		</n>
+		<n id="back_route_end" gridposx="0" gridposy="5">
+			<c>near_health</c>
+			<c lock="melee">back_route_start</c>
+			<c>weapon</c>
+		</n>
+		<n id="weapon" gridposx="0" gridposy="6">
+			<w/>
+			<c>back_route_end</c>
+		</n>
+
+		<npc id="npc_doctor" gridposx="6" gridposy="4" msg="I am doctor. Medicine near. Be careful."/>	
+		<melee id="melee" faces="east">
+			<covers>near_health</covers>
+		</melee>
+
+		<d id="door_down" to="room2" pos="br"/>
+	</room>
+</level>
