@@ -2,9 +2,11 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Align;
@@ -21,13 +23,17 @@ public class GameState_Meta extends GameState
 	String m_sLevelStart = null; // When not null, starts a new level
 	
 	Camera m_pCamera = null;
+
+	BlendTimer m_pAlphaTimerTop = new BlendTimer(0.5f, 2.f);
+	BlendTimer m_pAlphaTimerBL = new BlendTimer(2.5f, 2.f);
+	BlendTimer m_pAlphaTimerBR = new BlendTimer(2.5025f, 2.f);
 	
 	@Override
 	void create(Camera i_pCamera)
 	{
 		m_pCamera = i_pCamera;
 		// Create labels
-		m_pLabelMessage = new Label("Your daughter is ill.\nYour son is missing.", Resources.m_pStyleMetaLarge);
+		m_pLabelMessage = new Label("Your daughter is dying.\nYour son is missing.", Resources.m_pStyleMetaLarge);
 		m_pLabelMessage.setAlignment(Align.center);
 		m_pLabelMessage.setEllipsis(false);
 		m_pLabelMessage.setY(332.f);
@@ -49,6 +55,11 @@ public class GameState_Meta extends GameState
 		m_pButtonLeft.m_pSpriteSheetStates = Resources.m_pButtonMeta_Health;
 		m_pButtonRight.m_pSpriteSheetStates = Resources.m_pButtonMeta_Search;
 	}
+	
+	void start()
+	{
+		
+	}
 
 	void onLeft()
 	{
@@ -60,9 +71,19 @@ public class GameState_Meta extends GameState
 		m_sLevelStart = "level_heal_her";
 	}
 	
+	void updateFades()
+	{
+		m_pAlphaTimerBL.update();
+		m_pAlphaTimerBR.update();
+		m_pAlphaTimerTop.update();
+	}
+	
 	@Override
 	void render(SpriteBatch i_pBatch, ShapeRenderer i_pShapeRenderer)
 	{
+		// Update stuff
+		updateFades();
+		
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
@@ -80,6 +101,27 @@ public class GameState_Meta extends GameState
 
 			m_pButtonRight.draw(i_pBatch);
 			m_pLabelRight.draw(i_pBatch, 1.f);
+			
+			i_pBatch.end();
+			Gdx.gl.glEnable(GL20.GL_BLEND);
+			Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);	
+			i_pShapeRenderer.begin(ShapeType.Filled);
+			{
+				// Top
+				i_pShapeRenderer.setColor(new Color(0.f, 0.f, 0.f, 1.f - m_pAlphaTimerTop.getAlpha()));
+				i_pShapeRenderer.rect(0.f, 240.f, 270.f, 240.f);
+
+				// Bottom Left
+				i_pShapeRenderer.setColor(new Color(0.f, 0.f, 0.f, 1.f - m_pAlphaTimerBL.getAlpha()));
+				i_pShapeRenderer.rect(0.f, 0.f, 135.f, 240.f);
+
+				// Bottom Right
+				i_pShapeRenderer.setColor(new Color(0.f, 0.f, 0.f, 1.f - m_pAlphaTimerBR.getAlpha()));
+				i_pShapeRenderer.rect(135.f, 0.f, 135.f, 240.f);
+			}
+			i_pShapeRenderer.end();
+			Gdx.gl.glDisable(GL20.GL_BLEND);
+			i_pBatch.begin();
 		}
 		i_pBatch.end();
 		

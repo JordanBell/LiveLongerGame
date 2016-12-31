@@ -55,7 +55,7 @@ public class Crawler
 		if(m_pToNode != null)
 		{
 			// Check if we've reached our destination
-			if(m_vPosition.dst(m_pToNode.m_vPos) <= 8.f)
+			if(m_vPosition.dst(m_pToNode.m_vPos) <= 1.f)
 			{
 				m_pNode = m_pToNode;
 				m_pToNode = null;
@@ -64,7 +64,7 @@ public class Crawler
 		else if (m_pToDoor != null)
 		{
 			// Check if we've reached our destination
-			if(m_vPosition.dst(m_pToDoor.m_ePosition.toPositionCenter()) <= 8.f)
+			if(m_vPosition.dst(m_pToDoor.m_ePosition.toPositionCenter()) <= 1.f)
 			{
 				m_bTransitionActive = true;
 			}

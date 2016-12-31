@@ -37,7 +37,7 @@ public class Resources
 	
 	// Fonts
 	public static Color m_pColorDark = new Color(28.f / 255.f, 20.f / 255.f, 26.f / 255.f, 1.f);
-	public static Color m_pColorLight = new Color(152.f / 255.f, 165.f / 255.f, 139.f / 255.f, 1.f);
+	public static Color m_pColorLight = new Color(165.f / 255.f, 165.f / 255.f, 140.f / 255.f, 1.f);
 	
 	private static FreeTypeFontGenerator fontGenerator0 = new FreeTypeFontGenerator(Gdx.files.internal("fonts/chary.ttf"));
 	private static FreeTypeFontGenerator fontGenerator1 = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Golden-Sun.ttf"));
