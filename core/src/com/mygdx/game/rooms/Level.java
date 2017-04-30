@@ -77,6 +77,7 @@ public class Level
 					}
 					else if(pConnAsDoor != null)
 					{
+						pConnAsDoor.m_pFromNode = pNode;
 						pNode.m_lpNeighborDoors.add(pConnAsDoor); // TODO: Allow player to move through doors by tapping
 					}
 				}

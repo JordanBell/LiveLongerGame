@@ -56,18 +56,31 @@ public class Crawler
 			m_vPosition = m_pNode.m_vPos.cpy(); // Set a node-independant position
 			m_pNode = null; // Detach ourselves
 		}
+		else if(m_pToDoor != null)
+		{
+			// Begin movement
+			m_vPosition = m_pNode.m_vPos.cpy(); // Set a node-independant position
+			m_pNode = null; // Detach ourselves
+		}
 	}
 	
-	void goToDoor(Door i_pToDoor)
+	void goToDoor(Door i_pToDoor, NodeContainer i_pContainer)
 	{
 		if(i_pToDoor == null || i_pToDoor == m_pToDoor)
 		{
 			return;
 		}
 		
+		// Find the path to the node connected to the door
+		m_pPath = PathSearch.getPath(m_pNode, i_pToDoor.m_pFromNode, i_pContainer);
+		if(!m_pPath.isEmpty())
+		{
+			m_pPath.remove(0); // The first in the path will always be our current node; remove it now
+		}
+		
+		// Set the door, to go to after the path is exhausted.
 		m_pToDoor = i_pToDoor;
-		m_vPosition = m_pNode.m_vPos.cpy(); // Set a node-independant position
-		m_pNode = null; // Detach ourselves
+		consumePathHead();
 	}
 	
 	void updateTravel()

@@ -306,7 +306,7 @@ public class GameState_Rooms extends GameState
 			Door pToDoor = m_pCurrentRoom.getDoorByPosition(screenX, screenY);
 			if(pToDoor != null)
 			{
-				m_pPlayer.goToDoor(pToDoor);	
+				m_pPlayer.goToDoor(pToDoor, m_pCurrentRoom.m_pNodes);	
 				return true;
 			}
 		}

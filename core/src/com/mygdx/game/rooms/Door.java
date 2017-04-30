@@ -127,6 +127,7 @@ public class Door
 
 	Room m_pToRoom;
 	Node m_pToNode;
+	Node m_pFromNode;
 	EPosition m_ePosition;
 	String m_sID;
 	String m_sToIDRoom;
