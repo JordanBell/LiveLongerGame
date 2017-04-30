@@ -1,5 +1,7 @@
 package com.mygdx.game.rooms;
 
+import java.util.List;
+
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
@@ -23,20 +25,37 @@ public class Crawler
 	// Anim/render data
 	GraphicsComponent m_pGraphics = null;
 	
+	List<Node> m_pPath;
+	
 	public Crawler()
 	{
 	}
 	
-	void goToNode(Node i_pToNode)
+	void goToNode(Node i_pToNode, NodeContainer i_pContainer)
 	{
 		if(i_pToNode == null || i_pToNode == m_pToNode)
 		{
 			return;
 		}
 		
-		m_pToNode = i_pToNode;
-		m_vPosition = m_pNode.m_vPos.cpy(); // Set a node-independant position
-		m_pNode = null; // Detach ourselves
+		m_pPath = PathSearch.getPath(m_pNode, i_pToNode, i_pContainer);
+		m_pPath.remove(0); // The first in the path will always be our current node; remove it now
+		
+		consumePathHead();
+	}
+	
+	void consumePathHead()
+	{
+		if(!m_pPath.isEmpty())
+		{
+			// Set the target node to the next in the path
+			m_pToNode = m_pPath.get(0);
+			m_pPath.remove(0);
+			
+			// Begin movement
+			m_vPosition = m_pNode.m_vPos.cpy(); // Set a node-independant position
+			m_pNode = null; // Detach ourselves
+		}
 	}
 	
 	void goToDoor(Door i_pToDoor)
@@ -73,6 +92,9 @@ public class Crawler
 					// Remove the item
 					m_pNode.m_pItem = null;
 				}
+				
+				// If there is more of the path, continue along it
+				consumePathHead();
 			}
 		}
 		else if (m_pToDoor != null)

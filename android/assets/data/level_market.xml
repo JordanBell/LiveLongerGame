@@ -206,7 +206,16 @@ Tom likes that.
 			<c>r2</c>
 		</n>
 
-		<npc id="npc_child1" type="child" variant="3" gridposx="2" gridposy="1" offsetY="-4" msg="Someone left vial. We try. No luck. You try?"/>
+		<npc id="npc_child1" type="child" variant="3" gridposx="2" gridposy="1" offsetY="-4">
+		    <msg id="cc">
+		        <condition item="vial">
+		            <true>yesvial</true>
+		            <false>novial</false>
+		        </condition>
+		    </msg> 
+		    <msg id="novial">Someone left vial. We try. No luck. You try?</msg>
+		    <msg id="yesvial">Smart! Didn't try that. Wonder what vial for.</msg>
+	    </npc>
 		
 		<d id="door_down" to="main" node="l2" pos="br"/>
 	</room>

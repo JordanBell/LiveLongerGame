@@ -299,7 +299,7 @@ public class GameState_Rooms extends GameState
 			Node pToNode = m_pCurrentRoom.m_pNodes.getNodeByPosition(screenX, screenY);
 			if(pToNode != null && pToNode != m_pPlayer.m_pNode && pToNode != m_pPlayer.m_pToNode)
 			{
-				m_pPlayer.goToNode(pToNode);	
+				m_pPlayer.goToNode(pToNode, m_pCurrentRoom.m_pNodes);	
 				return true;
 			}
 			
