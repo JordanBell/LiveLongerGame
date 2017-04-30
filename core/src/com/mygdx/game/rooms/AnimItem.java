@@ -3,6 +3,7 @@ package com.mygdx.game.rooms;
 import java.util.ArrayList;
 
 import com.mygdx.game.Resources;
+import com.mygdx.game.rooms.Item.EType;
 
 public class AnimItem extends Anim
 {

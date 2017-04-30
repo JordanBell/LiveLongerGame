@@ -52,12 +52,28 @@ public class NodeContainer
 		for(Node pNode : m_lpNodes)
 		{
 			// Draw all neighbor connections for this node
-			for(Node pNeighbor : pNode.m_lpNeighbors)
+			for(Connection pCon : pNode.m_lpConnections)
 			{
+				Node pNeighbor = getNodeByID(pCon.m_sToID);
+				if(pNeighbor == null) continue;
+				
 				// Only draw if neighbor has not already drawn
 				if(!pNeighbor.m_bConnectionsRendered)
 				{
-					i_pShapeRenderer.rectLine(pNode.m_vPos, pNeighbor.m_vPos, 2.f);				
+					// Draw brown if rope, blue otherwise
+					if(pCon.m_bRopeRequired)
+					{
+						if(pCon.m_bRopeAdded)
+						{
+							i_pShapeRenderer.setColor(0.6f, 0.6f, 0.4f, 1.f);
+							i_pShapeRenderer.rectLine(pNode.m_vPos, pNeighbor.m_vPos, 2.f);
+						}
+					}
+					else
+					{
+						i_pShapeRenderer.setColor(0.f, 0.521f, 0.569f, 0.1f);
+						i_pShapeRenderer.rectLine(pNode.m_vPos, pNeighbor.m_vPos, 2.f);				
+					}
 				}
 			}
 			
@@ -86,6 +102,15 @@ public class NodeContainer
 		for(Node pNode : m_lpNodes)
 		{
 			i_pBatch.draw(pNodeTexture, pNode.m_vPos.x - iHW, pNode.m_vPos.y - iHH);
+			
+			// If the node can have a rope placed on it, draw that too
+			if(pNode.m_pRopeConnection != null)
+			{
+				Texture pHookTexture = Resources.m_pHook;
+				int iHHW = pHookTexture.getWidth() / 2;	// Half width
+				i_pBatch.draw(Resources.m_pHook, (int)pNode.m_vPos.x - iHHW, (int)pNode.m_vPos.y + 1);
+				
+			}
 			
 			// If the node has an item, draw that too
 			if(pNode.m_pItem != null)

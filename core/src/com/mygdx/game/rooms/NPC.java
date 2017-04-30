@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.XmlReader;
 import com.mygdx.game.Resources;
@@ -116,6 +117,8 @@ public class NPC
 	{
 		Adult,
 		Child,
+		Ghost,
+		Chest,
 		
 		Error;
 		
@@ -128,6 +131,14 @@ public class NPC
 			else if(i_s.equalsIgnoreCase("child"))
 			{
 				return Child;
+			}
+			else if(i_s.equalsIgnoreCase("ghost"))
+			{
+				return Ghost;
+			}
+			else if(i_s.equalsIgnoreCase("chest"))
+			{
+				return Chest;
 			}
 			
 			return Error;
@@ -175,7 +186,7 @@ public class NPC
 			case Error:
 				throw new RuntimeException("Type error.");
 			default:
-				throw new RuntimeException("Unknown type.");
+				return 1;
 		}
 	}
 	
@@ -190,6 +201,10 @@ public class NPC
 			case Child:
 			{
 				return new AnimNPCChild(m_iColorType);
+			}
+			case Ghost:
+			{
+				return new AnimGhost();
 			}
 			case Error:
 				throw new RuntimeException("Type error.");
@@ -313,5 +328,25 @@ public class NPC
 		m_iDialogueIndex = 0;
 		m_bHideBubble = true;
 		setDialogueByID(m_lpDialogue.get(0).m_sID);
+	}
+
+	public TextureRegion getChathead()
+	{
+		if(m_eType == EType.Adult)
+		{
+			return Resources.m_pChatheadNPCAdult.getRegion(m_iColorType);
+		}
+		else if(m_eType == EType.Child)
+		{
+			return Resources.m_pChatheadNPCChild.getRegion(m_iColorType);
+		}
+		else if(m_eType == EType.Ghost)
+		{
+			 return Resources.m_pChatheadNPCGhost.getRegion(0);
+		}
+		else
+		{
+			return null;
+		}
 	}
 }

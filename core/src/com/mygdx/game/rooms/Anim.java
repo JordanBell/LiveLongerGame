@@ -13,18 +13,25 @@ class Frame
 	int m_iIndex;
 	int m_iOffsetX;
 	int m_iOffsetY;
+	float m_fAlpha;
 	
 	Frame(float i_fTime, int i_iIndex)
 	{
-		this(i_fTime, i_iIndex, 0, 0);
+		this(i_fTime, i_iIndex, 0, 0, 1.f);
 	}
 	
 	Frame(float i_fTime, int i_iIndex, int i_iOffsetX, int i_iOffsetY)
+	{
+		this(i_fTime, i_iIndex, i_iOffsetX, i_iOffsetY, 1.f);
+	}
+	
+	Frame(float i_fTime, int i_iIndex, int i_iOffsetX, int i_iOffsetY, float i_fAlpha)
 	{
 		m_fTime = i_fTime;
 		m_iIndex = i_iIndex;
 		m_iOffsetX = i_iOffsetX;
 		m_iOffsetY = i_iOffsetY;
+		m_fAlpha = i_fAlpha;
 	}
 }
 
@@ -129,7 +136,9 @@ class Anim extends GraphicsComponent
 	@Override
 	public void draw(SpriteBatch i_pBatch, float x, float y)
 	{
+		i_pBatch.setColor(1.f, 1.f, 1.f, m_pCurrentFrame.m_fAlpha);
 		i_pBatch.draw(getCurrentRegion(), x + m_pCurrentFrame.m_iOffsetX, y + m_pCurrentFrame.m_iOffsetY);
+		i_pBatch.setColor(1.f, 1.f, 1.f, 1.f);
 	}
 	
 	public TextureRegion getCurrentRegion()

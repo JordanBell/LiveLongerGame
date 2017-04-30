@@ -39,6 +39,11 @@ public class Crawler
 		}
 		
 		m_pPath = PathSearch.getPath(m_pNode, i_pToNode, i_pContainer);
+		if(m_pPath.isEmpty())
+		{
+			// Cannot reach it
+			return;
+		}
 		m_pPath.remove(0); // The first in the path will always be our current node; remove it now
 		
 		consumePathHead();

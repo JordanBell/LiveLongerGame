@@ -297,9 +297,21 @@ public class GameState_Rooms extends GameState
 		{
 			// Move to tapped node
 			Node pToNode = m_pCurrentRoom.m_pNodes.getNodeByPosition(screenX, screenY);
-			if(pToNode != null && pToNode != m_pPlayer.m_pNode && pToNode != m_pPlayer.m_pToNode)
+			if(pToNode != null && pToNode != m_pPlayer.m_pToNode)
 			{
-				m_pPlayer.goToNode(pToNode, m_pCurrentRoom.m_pNodes);	
+				if(pToNode != m_pPlayer.m_pNode)
+				{
+					// Move to it if it's not our current node
+					m_pPlayer.goToNode(pToNode, m_pCurrentRoom.m_pNodes);
+				}
+				else
+				{
+					// Check if rope action
+					if(pToNode.m_pRopeConnection != null && !pToNode.m_pRopeConnection.m_bRopeAdded)
+					{
+						pToNode.useRope(m_pCurrentRoom.m_pNodes);
+					}
+				}
 				return true;
 			}
 			
@@ -360,7 +372,7 @@ public class GameState_Rooms extends GameState
 		if(m_pDialogueNPC == i_pNPC) return;
 		
 		m_bDialogueActive = true;
-		m_pDialogueChathead = Resources.m_pChatheadNPCAdult.getRegion(i_pNPC.m_iColorType);
+		m_pDialogueChathead = i_pNPC.getChathead();
 		m_pDialogueShutterTimer.start(EFadeType.In);
 		m_pDialogueNPC = i_pNPC;
 		m_pDialogueNPC.onStartDialogue();

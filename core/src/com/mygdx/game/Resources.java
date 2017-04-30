@@ -15,6 +15,7 @@ public class Resources
 	
 	public static Texture m_pBackground;
 	public static Texture m_pNode;
+	public static Texture m_pHook;
 	
 	// Door textures
 	public static Texture m_pDoorTL;
@@ -41,8 +42,10 @@ public class Resources
 	public static SpriteSheetGDX m_pNPCChild;
 	public static SpriteSheetGDX m_pCreature;
 	public static SpriteSheetGDX m_pItems;
+	public static SpriteSheetGDX m_pGhost;
 	public static SpriteSheetGDX m_pChatheadNPCAdult;
 	public static SpriteSheetGDX m_pChatheadNPCChild;
+	public static SpriteSheetGDX m_pChatheadNPCGhost;
 	public static SpriteSheetGDX m_pButtonMeta_Base;
 	public static SpriteSheetGDX m_pButtonMeta_Okay;
 	public static SpriteSheetGDX m_pButtonMeta_Health;
@@ -78,11 +81,13 @@ public class Resources
 	{
 		m_pBackground = new Texture("room/background_1.png");
 		m_pNode = new Texture("ui/node.png");
+		m_pHook = new Texture("room/hook.png");
 		m_pHero = new SpriteSheetGDX("room/hero.png", 1, 4, 13, 30);
 		m_pNPCAdult = new SpriteSheetGDX("room/NPC Adult.png", 2, 4, 16, 29);
 		m_pNPCChild = new SpriteSheetGDX("room/NPC Child.png", 2, 4, 12, 25);
 		m_pCreature = new SpriteSheetGDX("room/creature.png", 1, 4, 24, 24);
-		m_pItems = new SpriteSheetGDX("room/items.png", 1, 3, 16, 16);
+		m_pItems = new SpriteSheetGDX("room/items.png", 1, 4, 16, 16);
+		m_pGhost = new SpriteSheetGDX("room/ghost.png", 1, 1, 10, 29);
 		m_pButtonMeta_Base = new SpriteSheetGDX("ui/button_meta.png", 1, 2, 96, 96);
 		m_pButtonMeta_Health = new SpriteSheetGDX("ui/button_meta_health.png", 1, 2, 96, 96);
 		m_pButtonMeta_Search = new SpriteSheetGDX("ui/button_meta_search.png", 1, 2, 96, 96);
@@ -120,6 +125,8 @@ public class Resources
 		
 		// Chatheads
 		m_pChatheadNPCAdult = new SpriteSheetGDX("room/chatheads - NPC Adult.png", 1, 4, 64, 64);
+		m_pChatheadNPCChild = new SpriteSheetGDX("room/chatheads - NPC Child.png", 1, 4, 64, 64);
+		m_pChatheadNPCGhost = new SpriteSheetGDX("room/chatheads - NPC Ghost.png", 1, 1, 64, 64);
 		
 		// Fonts
 		m_pFontParam.color = m_pColorLight;

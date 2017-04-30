@@ -28,8 +28,13 @@ public class PathSearch
 		{
 			// Get paths along all neighbor connections
 			List<List<Node>> lsChildPaths = new ArrayList<List<Node>>();
-			for(Node pNeighbor : i_pFrom.m_lpNeighbors)
+			for(Connection pCon : i_pFrom.m_lpConnections)
 			{
+				if(pCon.isBlocked()) continue;
+				
+				Node pNeighbor = i_pContainer.getNodeByID(pCon.m_sToID);
+				if(pNeighbor == null) continue;
+				
 				// Skip if already explored
 				if(i_pExplored.contains(pNeighbor)) continue;
 				

@@ -159,7 +159,7 @@ Tom likes that.
 		<!-- Doors -->
 		<d id="door_bottom" to="main" node="1" pos="bm"/>
 		<d id="door_keyroom" to="keyroom" node="1" pos="tl"/>
-		<d id="door_storeroom" lock="lock_storeroom" to="storeroom" node="1" pos="tr"/>
+		<d id="door_storeroom" lock="lock_storeroom" to="storeroom" node="0" pos="tr"/>
 	</room>
 
 	<room id="keyroom" foreground="fg_keyroom.png">
@@ -193,7 +193,7 @@ Tom likes that.
 			<c>r1</c>
 		</n>
 		<n id="m1" gridposx="3" gridposy="5">
-			<c>4</c>
+			<c rope="true">4</c>
 			<c>m2</c>
 		</n>
 		<n id="m2" gridposx="3" gridposy="6">
@@ -220,48 +220,62 @@ Tom likes that.
 		<d id="door_down" to="main" node="l2" pos="br"/>
 	</room>
 
-	<room id="storeroom">
-		<n id="1" gridposx="5" gridposy="0">
+	<room id="storeroom" foreground="fg_storeroom.png">
+		<n id="0" gridposx="1" gridposy="0">
 			<c>door_down</c>
+			<c>1</c>
+		</n>
+		<n id="1" gridposx="1" gridposy="1">
+			<c>1</c>
 			<c>2</c>
 		</n>
-		<n id="2" gridposx="5" gridposy="2">
-			<c>3</c>
+		<n id="2" gridposx="3" gridposy="1">
 			<c>1</c>
-			<c>npc_doctor</c>
+			<c>3</c>
 		</n>
 		<n id="3" gridposx="3" gridposy="2">
 			<c>2</c>
-			<c>back_route_start</c>
-			<c>near_health</c>
+			<c>r1</c>
+			<c>l1</c>
 		</n>
-		<n id="near_health" gridposx="3" gridposy="5">
+		<n id="r1" gridposx="4" gridposy="2">
 			<c>3</c>
-			<c>back_route_end</c>
-			<c>health</c>
+			<c>r2</c>
 		</n>
-		<n id="health" gridposx="3" gridposy="6">
-			<c>near_health</c>
-			<mi/>
+		<n id="r2" gridposx="5" gridposy="2">
+			<c>r1</c>
+			<c>r3</c>
 		</n>
-		<n id="back_route_start" gridposx="0" gridposy="2">
+		<n id="r3" gridposx="5" gridposy="4">
+			<c>r2</c>
+			<c>r4</c>
+		</n>
+		<n id="r4" gridposx="5" gridposy="5">
+			<c>r3</c>
+			<c>l2</c>
+		</n>
+		<n id="l2" gridposx="3" gridposy="5">
+			<c>r4</c>
+			<c>l1</c>
+		</n>
+		<n id="l1" gridposx="3" gridposy="3">
 			<c>3</c>
-			<c>back_route_end</c>
+			<c>l2</c>
+			<c>ll1</c>
 		</n>
-		<n id="back_route_end" gridposx="0" gridposy="5">
-			<c>near_health</c>
-			<c lock="melee">back_route_start</c>
-			<c>weapon</c>
+		<n id="ll1" gridposx="0" gridposy="3">
+			<c>l1</c>
+			<c>ll2</c>
 		</n>
-		<n id="weapon" gridposx="0" gridposy="6">
-			<w/>
-			<c>back_route_end</c>
+		<n id="ll2" gridposx="0" gridposy="4">
+			<c>ll1</c>
 		</n>
+		
+		<npc id="ghost0" type="ghost" gridposx="3" gridposy="0" msg="Should not."/>
+		<npc id="ghost1" type="ghost" gridposx="4" gridposy="3" msg="Should not."/>
+		<npc id="ghost2" type="ghost" gridposx="5" gridposy="6" msg="Should not."/>
+		<npc id="ghost3" type="ghost" gridposx="3" gridposy="5" msg="Should not."/>
 
-		<melee id="melee" faces="east">
-			<covers>near_health</covers>
-		</melee>
-
-		<d id="door_down" to="main" node="1" pos="br"/>
+		<d id="door_down" to="main" node="r2" pos="bl"/>
 	</room>
 </level>

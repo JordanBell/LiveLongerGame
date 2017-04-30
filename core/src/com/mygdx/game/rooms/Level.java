@@ -68,12 +68,15 @@ public class Level
 			{
 				for(Connection pConnection : pNode.m_lpConnections)
 				{
-					// Add the node as a neighbor
 					Node pConnAsNode = pRoom.m_pNodes.getNodeByID(pConnection.m_sToID);
 					Door pConnAsDoor = pRoom.getDoorByID(pConnection.m_sToID);
 					if(pConnAsNode != null)
 					{
-						pNode.m_lpNeighbors.add(pConnAsNode);
+						// Add the node as a neighbor
+						if(pConnection.m_bRopeRequired)
+						{
+							pNode.m_pRopeConnection = pConnection;
+						}
 					}
 					else if(pConnAsDoor != null)
 					{
