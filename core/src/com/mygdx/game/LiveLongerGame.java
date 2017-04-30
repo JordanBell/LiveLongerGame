@@ -11,6 +11,12 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.mygdx.game.meta.GameState_Meta;
+import com.mygdx.game.rooms.GameState_Rooms;
+import com.mygdx.game.rooms.LevelLoader;
+import com.mygdx.game.util.BlendTimer;
+import com.mygdx.game.util.BlendTimer.EFadeType;
+import com.mygdx.game.util.Config;
 
 public class LiveLongerGame implements ApplicationListener
 {
@@ -18,6 +24,7 @@ public class LiveLongerGame implements ApplicationListener
 	Viewport m_pViewport;
 	
 	InputMultiplexer m_pInputMultiplexer;
+	public static boolean s_bTransitionState = false;
 	
 	// Renderers
 	SpriteBatch m_pBatch;
@@ -28,13 +35,23 @@ public class LiveLongerGame implements ApplicationListener
 	GameState m_pCurrentState = null;
 	
 	// Transition data
-	float m_fTransitionPercent = 0.f;
+	BlendTimer m_pTransitionAlpha;
 	
 	@Override
 	public void create() 
 	{
 		// Load resources
 		Resources.load();
+		
+		// Load save data
+		SaveData.load();
+		
+		m_pTransitionAlpha = new BlendTimer(0.25f, 1.5f)
+		{
+			@Override
+			public void onOut() { onFadeOpaque(); }
+			public void onIn() { m_pTransitionAlpha.start(EFadeType.None); }
+		};
 		
 		m_pCamera = new OrthographicCamera();
 	    m_pViewport = new FitViewport(270, 480, m_pCamera);
@@ -51,45 +68,48 @@ public class LiveLongerGame implements ApplicationListener
 		m_pBatch = new SpriteBatch();
 		m_pShapeRenderer = new ShapeRenderer();
 		
-		setState(m_pGameStateMeta);
+		// Set initial state based on save data
+		//setState(SaveData.getStateIndex() == 0 ? m_pGameStateMeta : m_pGameStateRooms);
+		setState(m_pGameStateRooms);
+		
+		//m_pGameStateMeta.start();
+		//m_pGameStateRooms.start(LevelLoader.getLevelByID("level_heal_her"));
 		m_pGameStateRooms.start(LevelLoader.m_lpLevels.get(0));
 	}
 	
-	void instantTransitionToRooms()
+	void onFadeOpaque()
 	{
-		// Be careful with this function; No state validation
-		setState(m_pGameStateRooms);
-		m_pGameStateRooms.start(LevelLoader.getLevelByID(m_pGameStateMeta.m_sLevelStart));
-		m_pGameStateMeta.m_sLevelStart = null;
+		
+		
+		if(m_pCurrentState == m_pGameStateMeta)
+		{
+			// Be careful with this function; No state validation
+			setState(m_pGameStateRooms);
+			m_pGameStateRooms.start(LevelLoader.getLevelByID(m_pGameStateMeta.m_sLevelStart));
+			m_pGameStateMeta.m_sLevelStart = null;
+		}
+		else
+		{
+			setState(m_pGameStateMeta);
+			// TODO: Here or elsewhere, set the progress so that the meta can be updated
+			m_pGameStateMeta.start();
+		}
+		
+		m_pTransitionAlpha.start(EFadeType.In);
 	}
 	
-	void updateTransition()
+	public void checkForStateTransitions()
 	{
-		final float k_fTransitionSpeed = 0.01f;
-		
-		if(m_pGameStateMeta.m_sLevelStart != null)
+		if(s_bTransitionState)
 		{
-			// Transition should happen soon
-			if(Config.m_bTurbo)
+			if(!m_pTransitionAlpha.isBlending())
 			{
-				instantTransitionToRooms();
-				return;
+				m_pTransitionAlpha.start(EFadeType.Out);
 			}
-			
-			m_fTransitionPercent += k_fTransitionSpeed;
-			if(m_fTransitionPercent >= 1.f)
-			{
-				instantTransitionToRooms();
-			}
+
+			s_bTransitionState = false;
 		}
-		else if(m_fTransitionPercent > 0.f)
-		{
-			m_fTransitionPercent -= k_fTransitionSpeed;
-			if(m_fTransitionPercent <= 0.f)
-			{
-				m_fTransitionPercent = 0.f;
-			}
-		}
+
 	}
 
 	@Override
@@ -99,24 +119,25 @@ public class LiveLongerGame implements ApplicationListener
 		m_pViewport.apply();
 	    m_pCamera.position.set(m_pCamera.viewportWidth / 2, m_pCamera.viewportHeight / 2, 0);
 
+	    checkForStateTransitions();
+		m_pTransitionAlpha.update();
+	    
 	    // Update projection matrices after camera update
 	    m_pBatch.setProjectionMatrix(m_pCamera.combined);
 		m_pShapeRenderer.setProjectionMatrix(m_pCamera.combined);
-		
-		updateTransition();
 		
 		// Render the current state
 		{
 			m_pCurrentState.render(m_pBatch, m_pShapeRenderer);
 		}
 		
-		if(m_fTransitionPercent > 0.f)
+		if(m_pTransitionAlpha.isBlending())
 		{
 			Gdx.gl.glEnable(GL20.GL_BLEND);
 			Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);	
 			{
 				m_pShapeRenderer.begin(ShapeType.Filled);
-				m_pShapeRenderer.setColor(new Color(0.f, 0.f, 0.f, m_fTransitionPercent));
+				m_pShapeRenderer.setColor(new Color(0.f, 0.f, 0.f, 1.f - m_pTransitionAlpha.get()));
 				m_pShapeRenderer.rect(0.f, 0.f, 270.f, 480.f);
 				m_pShapeRenderer.end();
 			}

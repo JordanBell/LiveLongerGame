@@ -17,9 +17,7 @@ TODO:
 	- Cannot pass through connection
 -->
 
-
-
-<level startRoom="room1" startNode="1">
+<level startRoom="room3" startNode="1">
 	<room id="room1">
 		<n id="1" gridposx="3" gridposy="0">
 			<c>2</c>
@@ -98,7 +96,7 @@ TODO:
 			<c>back_route_end</c>
 		</n>
 
-		<npc id="npc_doctor" gridposx="6" gridposy="4" msg="I am doctor. Medicine near. Be careful."/>	
+		<npc id="npc_doctor" gridposx="5" gridposy="2" offsetY="8" msg="I am doctor. Medicine near. Be careful."/>	
 		<melee id="melee" faces="east">
 			<covers>near_health</covers>
 		</melee>

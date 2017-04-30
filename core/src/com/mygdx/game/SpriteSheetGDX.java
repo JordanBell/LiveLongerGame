@@ -35,6 +35,11 @@ public class SpriteSheetGDX
 		}
 	}
 	
+	public int getNumRegions()
+	{
+		return m_iColumns * m_iRows;
+	}
+	
 	public TextureRegion getRegion(final int i_iSerialIndex)
 	{
 		final int iX = i_iSerialIndex % m_iColumns;

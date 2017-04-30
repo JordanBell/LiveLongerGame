@@ -1,0 +1,258 @@
+<!-- 
+Legend:
+	n = node
+	c = connection
+	d = door
+	k = key
+	w = weapon
+	mi = mission item
+	npc = dialogue npc
+-->
+
+<level startRoom="main" startNode="1">
+	<room id="main" foreground="fg_market.png">
+	    
+	    <!-- Entrance Nodes -->
+		<n id="1" gridposx="3" gridposy="0">
+			<c>2</c>
+		</n>
+		<n id="2" gridposx="3" gridposy="1">
+			<c>1</c>
+			<c>l0</c>
+			<c>r0</c>
+		</n>
+		
+		<!-- Left Side -->
+		<n id="l0" gridposx="1" gridposy="1">
+			<c>2</c>
+			<c>l1</c>
+		</n>
+		<n id="l1" gridposx="1" gridposy="4">
+			<c>l0</c>
+			<c>l2</c>
+		</n>
+		<n id="l2" gridposx="1" gridposy="6">
+			<c>l1</c>
+			<c>t0</c>
+			<c>door_keyroom</c>
+		</n>
+		
+		<!-- Top Side -->
+		<n id="t0" gridposx="3" gridposy="6">
+			<c>l2</c>
+			<c>r2</c>
+			<c>t1</c>
+		</n>
+		<n id="t1" gridposx="3" gridposy="4">
+			<c>t0</c>
+		</n>
+		
+		<!-- Right Side -->
+		<n id="r0" gridposx="5" gridposy="1">
+			<c>2</c>
+			<c>r1</c>
+		</n>
+		<n id="r1" gridposx="5" gridposy="3">
+			<c>r0</c>
+			<c>r2</c>
+		</n>
+		<n id="r2" gridposx="5" gridposy="6">
+			<c>r1</c>
+			<c>t0</c>
+			<c>door_storeroom</c>
+		</n>
+		
+		<!-- NPCs -->
+		<npc id="npc_market1" type="adult" variant="1" gridposx="3" gridposy="2" offsetY="-16">
+			<msg id="1">
+			    Throbbing Gem? Will buy. $1000.
+			    <left type="y" to="ifyes"/>
+			    <right type="n"/>
+			</msg>
+			<msg id="ifyes">No gem. Go away.</msg>
+		</npc>
+		<npc id="npc_market2" type="adult" variant="0" gridposx="0" gridposy="4" offsetX="8" msg="Busy place. Safe. Good. Trade."/>
+		<npc id="npc_market5" type="adult" variant="3" gridposx="0" gridposy="6" offsetX="8">
+			<msg id="1">
+			    10 Cans. You buy? $100.
+			    <left type="y" to="ifyes"/>
+			    <right type="n"/>
+			</msg>
+			<msg id="ifyes">No money. Go away.</msg>
+		</npc>
+		<npc id="npc_market6" type="adult" variant="0" gridposx="6" gridposy="1" offsetX="-8">
+			<msg id="1">
+			    20 Bottles. You buy? $150.
+			    <left type="y" to="ifyes"/>
+			    <right type="n"/>
+			</msg>
+			<msg id="ifyes">No money. Go away.</msg>
+		</npc>
+		<npc id="npc_market7" type="adult" variant="1" gridposx="6" gridposy="6" offsetX="-8">
+		    <msg id="cc">
+		        <condition item="key_karma">
+		            <true>thanks</true>
+		            <false>1</false>
+		        </condition>
+		    </msg>
+		    <msg id="thanks">
+		        Thanks again. 
+Really.
+		    </msg>
+			<msg id="1">
+			    Seen key? Lost it. My key. Need it.
+			    <left type="y" to="ifyes"/>
+			    <right type="n"/>
+			</msg>
+			<msg id="ifyes">
+			    <condition item="key">
+			        <true>ifkeytrue</true>
+			        <false>ifkeyfalse</false>
+			    </condition>
+			</msg>
+			<msg id="ifkeytrue">
+	            What a relief. 
+Thank you.
+So much.
+	            <event>key_to_owner</event>
+			</msg>
+			<msg id="ifkeyfalse">
+			     Liar. No key. Go away.
+			</msg>
+		</npc>
+		<npc id="npc_market3" type="adult" variant="2" gridposx="3" gridposy="3">
+		    <msg id="1">
+			    <condition item="key">
+			        <true>keyobtained</true>
+			        <false>notkeyobtained</false>
+			    </condition>
+		    </msg>
+			<msg id="keyobtained">
+			    Hello friend. Don't get caught.
+		    </msg>
+			<msg id="notkeyobtained">
+			    My name Tom. Have key. You buy? Give me Vial of Black.
+			    <left type="y" to="ifyes"/>
+			    <right type="n" to="ifno"/>
+			</msg>
+			<msg id="ifno">
+			    You want key. Tom want Vial. Come back later.
+			</msg>
+			<msg id="ifyes">
+			    <condition item="vial">
+			        <true>ifvialtrue</true>
+			        <false>ifvialfalse</false>
+			    </condition>
+			</msg>
+			<msg id="ifvialtrue">
+	            Thank you. Key is yours.
+	            <event>vial_for_key</event>
+			</msg>
+			<msg id="ifvialfalse" next="ifno">
+			     No vial.
+Funny.
+Tom likes that.
+			</msg>
+		</npc>
+		<npc id="npc_market4" type="adult" variant="3" gridposx="4" gridposy="4" msg="Not trust Tom."/>
+
+		<!-- Doors -->
+		<d id="door_bottom" to="main" node="1" pos="bm"/>
+		<d id="door_keyroom" to="keyroom" node="1" pos="tl"/>
+		<d id="door_storeroom" lock="lock_storeroom" to="storeroom" node="1" pos="tr"/>
+	</room>
+
+	<room id="keyroom" foreground="fg_keyroom.png">
+		<n id="1" gridposx="5" gridposy="0">
+			<c>door_down</c>
+			<c>2</c>
+		</n>
+		<n id="2" gridposx="3" gridposy="0">
+			<c>1</c>
+			<c>3</c>
+		</n>
+		<n id="3" gridposx="3" gridposy="1">
+			<c>2</c>
+			<c>4</c>
+		</n>
+		<n id="4" gridposx="3" gridposy="2">
+			<c>3</c>
+			<c>l1</c>
+			<c>r1</c>
+			<c rope="true">m1</c>
+		</n>
+		<n id="l1" gridposx="0" gridposy="2">
+			<c>4</c>
+			<rope/>
+		</n>
+		<n id="r1" gridposx="5" gridposy="2">
+			<c>4</c>
+			<c>r2</c>
+		</n>
+		<n id="r2" gridposx="5" gridposy="4">
+			<c>r1</c>
+		</n>
+		<n id="m1" gridposx="3" gridposy="5">
+			<c>4</c>
+			<c>m2</c>
+		</n>
+		<n id="m2" gridposx="3" gridposy="6">
+			<c>m1</c>
+			<c>m3</c>
+			<vial/>
+		</n>
+		<n id="m3" gridposx="5" gridposy="6">
+			<c>m2</c>
+			<c>r2</c>
+		</n>
+
+		<npc id="npc_child1" type="child" variant="3" gridposx="2" gridposy="1" offsetY="-4" msg="Someone left vial. We try. No luck. You try?"/>
+		
+		<d id="door_down" to="main" node="l2" pos="br"/>
+	</room>
+
+	<room id="storeroom">
+		<n id="1" gridposx="5" gridposy="0">
+			<c>door_down</c>
+			<c>2</c>
+		</n>
+		<n id="2" gridposx="5" gridposy="2">
+			<c>3</c>
+			<c>1</c>
+			<c>npc_doctor</c>
+		</n>
+		<n id="3" gridposx="3" gridposy="2">
+			<c>2</c>
+			<c>back_route_start</c>
+			<c>near_health</c>
+		</n>
+		<n id="near_health" gridposx="3" gridposy="5">
+			<c>3</c>
+			<c>back_route_end</c>
+			<c>health</c>
+		</n>
+		<n id="health" gridposx="3" gridposy="6">
+			<c>near_health</c>
+			<mi/>
+		</n>
+		<n id="back_route_start" gridposx="0" gridposy="2">
+			<c>3</c>
+			<c>back_route_end</c>
+		</n>
+		<n id="back_route_end" gridposx="0" gridposy="5">
+			<c>near_health</c>
+			<c lock="melee">back_route_start</c>
+			<c>weapon</c>
+		</n>
+		<n id="weapon" gridposx="0" gridposy="6">
+			<w/>
+			<c>back_route_end</c>
+		</n>
+
+		<melee id="melee" faces="east">
+			<covers>near_health</covers>
+		</melee>
+
+		<d id="door_down" to="main" node="1" pos="br"/>
+	</room>
+</level>

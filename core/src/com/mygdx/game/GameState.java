@@ -7,8 +7,8 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 abstract public class GameState implements InputProcessor
 {
-	boolean m_bActive = false;
+	public boolean m_bActive = false;
 	
-	abstract void create(Camera i_pCamera);
-	abstract void render(SpriteBatch i_pBatch, ShapeRenderer i_pShapeRenderer);
+	public abstract void create(Camera i_pCamera);
+	public abstract void render(SpriteBatch i_pBatch, ShapeRenderer i_pShapeRenderer);
 }
