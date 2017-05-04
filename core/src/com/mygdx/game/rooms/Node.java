@@ -29,7 +29,8 @@ class Item
 		EType_Key,
 		EType_Weapon,
 		EType_Vial,
-		EType_Rope;
+		EType_Rope,
+		EType_Medicine;
 		
 		@Override
 		public String toString()
@@ -40,6 +41,7 @@ class Item
 				case EType_Weapon: return "weapon";
 				case EType_Vial: return "vial";
 				case EType_Rope: return "rope";	
+				case EType_Medicine: return "medicine";	
 				default: throw new RuntimeException("All item types must convert to string.");
 			}
 		}
@@ -111,6 +113,10 @@ public class Node
 			else if(sChildName.equals("rope"))
 			{
 				m_pItem = new Item(Item.EType.EType_Rope);
+			}
+			else if(sChildName.equals("medicine")) // Ends the level in level_heal_her
+			{
+				m_pItem = new Item(Item.EType.EType_Medicine);
 			}
 		}
 	}

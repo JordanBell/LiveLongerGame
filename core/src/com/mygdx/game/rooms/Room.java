@@ -104,8 +104,12 @@ public class Room
 			{
 				Door pDoor = new Door();
 				pDoor.m_sID = pChild.getAttribute("id");
-				pDoor.m_sToIDRoom = pChild.getAttribute("to");
-				pDoor.m_sToIDNode = pChild.getAttribute("node");
+				pDoor.m_bIsEndOfLevel = pChild.getAttribute("end", "false").equals("true");
+				if(!pDoor.m_bIsEndOfLevel)
+				{
+					pDoor.m_sToIDRoom = pChild.getAttribute("to");
+					pDoor.m_sToIDNode = pChild.getAttribute("node");
+				}
 				pDoor.m_sLock = pChild.getAttribute("lock", null);
 				pDoor.m_ePosition = Door.EPosition.fromString(pChild.getAttribute("pos"));
 				m_lpDoors.add(pDoor);

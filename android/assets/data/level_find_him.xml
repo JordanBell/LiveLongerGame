@@ -1,0 +1,123 @@
+<!-- 
+Legend:
+	n = node
+	c = connection
+	d = door
+	k = key
+	w = weapon
+	mi = mission item
+	npc = dialogue npc
+-->
+
+<!-- 
+TODO:
+	- Establish node connections after parsing
+	- Render node items based on item enum type
+	- Determine player's start position after parsing
+	- Cannot pass through connection
+-->
+
+<level startRoom="room1" startNode="1">
+	<room id="room1" foreground="fg_fh1.png">
+		<n id="1" gridposx="0" gridposy="3">
+			<c>2</c>
+		</n>
+		<n id="2" gridposx="3" gridposy="3">
+			<c>1</c>
+			<c>3</c>
+		</n>
+		<n id="3" gridposx="6" gridposy="3">
+			<c>2</c>
+			<c>door</c>
+		</n>
+
+		<d id="door" to="room2" node="1" pos="rm"/>
+	</room>
+
+	<room id="room2" foreground="fg_fh2.png">
+		<n id="1" gridposx="0" gridposy="5">
+			<c>door_left</c>
+			<c>2</c>
+		</n>
+		<n id="2" gridposx="3" gridposy="5">
+			<c>1</c>
+			<c>3</c>
+			<c lock="lock">4</c>
+		</n>
+		<n id="3" gridposx="6" gridposy="5">
+			<c>2</c>
+			<k id="lock"/>
+		</n>
+
+		<n id="4" gridposx="3" gridposy="2">
+			<c>2</c>
+			<c>5</c>
+		</n>
+		<n id="5" gridposx="3" gridposy="0">
+			<c>4</c>
+			<c>door_down</c>
+		</n>
+
+		<d id="door_left" to="room1" node="3" pos="lt"/>
+		<d id="door_down" to="room3" node="1" pos="bm"/>
+	</room>
+
+	<room id="room3" foreground="fg_fh3.png">
+		<n id="1" gridposx="3" gridposy="5">
+			<c>door_up</c>
+			<c>2</c>
+		</n>
+		<n id="2" gridposx="1" gridposy="5">
+			<c>3</c>
+			<c>1</c>
+		</n>
+		<n id="3" gridposx="1" gridposy="3">
+			<c>2</c>
+			<c>4</c>
+		</n>
+		<n id="4" gridposx="3" gridposy="3">
+			<c>3</c>
+			<c>5</c>
+			<c>r0</c>
+		</n>
+		<n id="5" gridposx="3" gridposy="1">
+			<c>4</c>
+			<c>6</c>
+			<c>r3</c>
+			<c>l1</c>
+		</n>
+		<n id="6" gridposx="3" gridposy="0">
+			<c>5</c>
+			<k id="exit"/>
+		</n>
+		
+		<n id="r0" gridposx="4" gridposy="3">
+			<c>4</c>
+			<c>r1</c>
+		</n>
+		<n id="r1" gridposx="6" gridposy="4">
+			<c>r0</c>
+			<c>r2</c>
+		</n>
+		<n id="r2" gridposx="6" gridposy="2">
+			<c>r1</c>
+			<c>r3</c>
+			<w/>
+		</n>
+		<n id="r3" gridposx="4" gridposy="1">
+			<c>r2</c>
+			<c>5</c>
+		</n>
+		
+		<n id="l1" gridposx="0" gridposy="1">
+			<c>5</c>
+			<c>door_left</c>
+		</n>
+
+		<npc id="npc" gridposx="3" gridposy="4" msg="Saw Men. Had boy. Near. Be careful."/>	
+		<melee id="melee" node="r3" faces="west" covers="5"/>
+
+		<d id="door_up" to="room2" node="5" pos="tm"/>
+		<d id="door_left" pos="lb" end="true"/>
+	</room>
+</level>

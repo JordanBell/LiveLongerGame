@@ -133,6 +133,7 @@ public class Door
 	String m_sToIDRoom;
 	String m_sToIDNode;
 	String m_sLock;
+	boolean m_bIsEndOfLevel = false;
 	boolean m_bUnlocked = false;
 	
 	void draw(SpriteBatch i_pBatch)

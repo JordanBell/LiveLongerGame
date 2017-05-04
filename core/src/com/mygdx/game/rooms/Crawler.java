@@ -105,7 +105,7 @@ public class Crawler
 				if(m_pNode.m_pItem != null)
 				{
 					// Add the item to the inventory
-					SaveData.m_lsItems.add(m_pNode.m_pItem.m_eType.toString());
+					GameState_Rooms.onEvent("itemget_" + m_pNode.m_pItem.m_eType.toString()); // Create an itemget event
 					
 					// Remove the item
 					m_pNode.m_pItem = null;

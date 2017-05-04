@@ -157,7 +157,6 @@ Tom likes that.
 		<npc id="npc_market4" type="adult" variant="3" gridposx="4" gridposy="4" msg="Not trust Tom."/>
 
 		<!-- Doors -->
-		<d id="door_bottom" to="main" node="1" pos="bm"/>
 		<d id="door_keyroom" to="keyroom" node="1" pos="tl"/>
 		<d id="door_storeroom" lock="lock_storeroom" to="storeroom" node="0" pos="tr"/>
 	</room>
@@ -226,7 +225,7 @@ Tom likes that.
 			<c>1</c>
 		</n>
 		<n id="1" gridposx="1" gridposy="1">
-			<c>1</c>
+			<c>0</c>
 			<c>2</c>
 		</n>
 		<n id="2" gridposx="3" gridposy="1">

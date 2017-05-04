@@ -52,15 +52,18 @@ public class Level
 			// Go through doors and connect them to rooms
 			for(Door pDoor : pRoom.m_lpDoors)
 			{
-				pDoor.m_pToRoom = getRoomByID(pDoor.m_sToIDRoom);
-				if(pDoor.m_pToRoom == null)
+				if(!pDoor.m_bIsEndOfLevel) // Only link if this door isn't the end of level
 				{
-					throw new RuntimeException("Unrecognised room that this door leads to: " + pDoor.m_sToIDRoom);
-				}
-				pDoor.m_pToNode = pDoor.m_pToRoom.m_pNodes.getNodeByID(pDoor.m_sToIDNode);
-				if(pDoor.m_pToNode == null)
-				{
-					throw new RuntimeException("Unrecognised node (in room " + pDoor.m_sToIDRoom + ") that this door leads to: " + pDoor.m_sToIDNode);
+					pDoor.m_pToRoom = getRoomByID(pDoor.m_sToIDRoom);
+					if(pDoor.m_pToRoom == null)
+					{
+						throw new RuntimeException("Unrecognised room that this door leads to: " + pDoor.m_sToIDRoom);
+					}
+					pDoor.m_pToNode = pDoor.m_pToRoom.m_pNodes.getNodeByID(pDoor.m_sToIDNode);
+					if(pDoor.m_pToNode == null)
+					{
+						throw new RuntimeException("Unrecognised node (in room " + pDoor.m_sToIDRoom + ") that this door leads to: " + pDoor.m_sToIDNode);
+					}
 				}
 			}
 			

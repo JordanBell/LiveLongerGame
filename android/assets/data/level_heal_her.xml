@@ -17,7 +17,7 @@ TODO:
 	- Cannot pass through connection
 -->
 
-<level startRoom="room3" startNode="1">
+<level startRoom="room1" startNode="1">
 	<room id="room1">
 		<n id="1" gridposx="3" gridposy="0">
 			<c>2</c>
@@ -80,26 +80,28 @@ TODO:
 		</n>
 		<n id="health" gridposx="3" gridposy="6">
 			<c>near_health</c>
-			<mi/>
+			<medicine/>
 		</n>
 		<n id="back_route_start" gridposx="0" gridposy="2">
 			<c>3</c>
 			<c>back_route_end</c>
 		</n>
 		<n id="back_route_end" gridposx="0" gridposy="5">
-			<c>near_health</c>
-			<c lock="melee">back_route_start</c>
+			<c>back_route_enemy</c>
+			<c>back_route_start</c>
 			<c>weapon</c>
 		</n>
-		<n id="weapon" gridposx="0" gridposy="6">
-			<w/>
+		<n id="back_route_enemy" gridposx="2" gridposy="5">
+			<c>near_health</c>
 			<c>back_route_end</c>
+		</n>
+		<n id="weapon" gridposx="0" gridposy="6">
+			<c>back_route_end</c>
+			<w/>
 		</n>
 
 		<npc id="npc_doctor" gridposx="5" gridposy="2" offsetY="8" msg="I am doctor. Medicine near. Be careful."/>	
-		<melee id="melee" faces="east">
-			<covers>near_health</covers>
-		</melee>
+		<melee id="melee" node="back_route_enemy" faces="east" covers="near_health"/>
 
 		<d id="door_down" to="room2" node="4" pos="br"/>
 	</room>

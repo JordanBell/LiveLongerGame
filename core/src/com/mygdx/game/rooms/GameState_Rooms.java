@@ -16,8 +16,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Align;
 import com.mygdx.game.GameState;
 import com.mygdx.game.InputButton;
+import com.mygdx.game.LiveLongerGame;
 import com.mygdx.game.Resources;
 import com.mygdx.game.SaveData;
+import com.mygdx.game.SaveData.EProgress;
 import com.mygdx.game.util.BlendTimer;
 import com.mygdx.game.util.BlendTimer.EFadeType;
 import com.mygdx.game.util.Config;
@@ -39,6 +41,7 @@ public class GameState_Rooms extends GameState
 	Camera m_pCamera = null;
 	
 	float m_fTransitionBlackness = 0.f;
+	boolean m_bIsEnded = false;
 	
 	ArrayList<String> m_lsInventory = new ArrayList<String>();
 	
@@ -66,8 +69,9 @@ public class GameState_Rooms extends GameState
 		// Create all rooms
 		try
 		{
-			LevelLoader.parseFile("data/level_market.xml");
+			LevelLoader.parseFile("data/level_find_him.xml");
 			LevelLoader.parseFile("data/level_heal_her.xml");
+			LevelLoader.parseFile("data/level_market.xml");
 		} 
 		catch (IOException e)
 		{
@@ -91,6 +95,11 @@ public class GameState_Rooms extends GameState
 		m_pLabelDialogue.setWidth(170.f);
 	}
 	
+	public void start()
+	{
+		start(LevelLoader.getLevelByID(SaveData.m_eProgress.getLevel()));
+	}
+	
 	public void start(Level i_pLevel)
 	{
 		if(i_pLevel == null)
@@ -98,9 +107,12 @@ public class GameState_Rooms extends GameState
 			throw new RuntimeException("Null level; perhaps its file has not been parsed into the GameState_Rooms file?");
 		}
 		
+		m_bIsEnded = false;
 		m_pCurrentLevel = i_pLevel;
 		m_pCurrentRoom = m_pCurrentLevel.m_pStartRoom;
 		m_pPlayer.m_pNode = m_pCurrentLevel.m_pStartNode;
+		m_pPlayer.m_pToDoor = null;
+		m_pPlayer.m_bTransitionActive = false;
 	}
 	
 	void onTransitionEnd() {}
@@ -116,6 +128,8 @@ public class GameState_Rooms extends GameState
 	
 	void updateTransition()
 	{
+		if(m_bIsEnded) return;
+		
 		// Transition state management
 		if(m_eTransition != ETransition.None)
 		{
@@ -143,8 +157,17 @@ public class GameState_Rooms extends GameState
 		}
 		else if(m_pPlayer.m_bTransitionActive)
 		{
-			// Start a transition into the next room
-			m_eTransition = ETransition.Out;
+			if(m_pPlayer.m_pToDoor.m_bIsEndOfLevel)
+			{
+				m_bIsEnded = true;
+				// Start transition into next game state
+				loadMeta(EProgress.values()[SaveData.m_eProgress.ordinal() + 1]);
+			}
+			else
+			{
+				// Start a transition into the next room
+				m_eTransition = ETransition.Out;
+			}
 			
 			// End all dialogue
 			onDialogueFinish();
@@ -163,6 +186,29 @@ public class GameState_Rooms extends GameState
 			SaveData.m_lsItems.remove("key");
 			SaveData.m_lsItems.add("key_karma");
 		}
+		else if(i_sEventID.startsWith("itemget_"))
+		{
+			String sItemName = i_sEventID.substring(8);
+			
+			// Handle certain items differently
+			if(sItemName.equals("medicine"))
+			{
+				// End the level; start Meta 2
+				loadMeta(EProgress.Meta2);
+			}
+			else
+			{
+				// Add the item to the inventory
+				SaveData.m_lsItems.add(sItemName);
+			}
+		}
+	}
+	
+	void loadMeta(EProgress i_eProgress)
+	{
+		LiveLongerGame.s_bTransitionState = true;
+		SaveData.setProgress(i_eProgress);
+		SaveData.save();
 	}
 
 	@Override
@@ -178,7 +224,10 @@ public class GameState_Rooms extends GameState
 		}
 		m_lsEventQueue.clear();
 		
-		m_pCurrentRoom.update(m_pPlayer);
+		if(!m_bIsEnded)
+		{
+			m_pCurrentRoom.update(m_pPlayer);
+		}
 		
 		i_pBatch.begin();
 		{

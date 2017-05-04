@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.mygdx.game.SaveData.EProgress;
 import com.mygdx.game.meta.GameState_Meta;
 import com.mygdx.game.rooms.GameState_Rooms;
 import com.mygdx.game.rooms.LevelLoader;
@@ -69,18 +70,24 @@ public class LiveLongerGame implements ApplicationListener
 		m_pShapeRenderer = new ShapeRenderer();
 		
 		// Set initial state based on save data
-		//setState(SaveData.getStateIndex() == 0 ? m_pGameStateMeta : m_pGameStateRooms);
-		setState(m_pGameStateRooms);
+		setState(SaveData.getStateIndex() == 0 ? m_pGameStateMeta : m_pGameStateRooms);
+		if(m_pCurrentState == m_pGameStateMeta) m_pGameStateMeta.start();
+		else									m_pGameStateRooms.start();
 		
-		//m_pGameStateMeta.start();
+		// Debug: Skip to a particular state
+		//setState(m_pGameStateRooms);
 		//m_pGameStateRooms.start(LevelLoader.getLevelByID("level_heal_her"));
-		m_pGameStateRooms.start(LevelLoader.m_lpLevels.get(0));
+		//m_pGameStateRooms.start(LevelLoader.m_lpLevels.get(0));
+		//SaveData.m_eProgress = EProgress.Rooms1_Find;
+
+		//setState(m_pGameStateMeta);
+		//m_pGameStateMeta.start();
+		//SaveData.m_eProgress = EProgress.Meta1;
 	}
 	
 	void onFadeOpaque()
 	{
-		
-		
+		// If we're currently in the meta game state, switch to the tooms, and vice versa
 		if(m_pCurrentState == m_pGameStateMeta)
 		{
 			// Be careful with this function; No state validation

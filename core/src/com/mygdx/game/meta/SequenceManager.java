@@ -19,6 +19,6 @@ public class SequenceManager
 	
 	public Sequence getCurrent()
 	{
-		return m_lpSequences.get(3);
+		return m_lpSequences.get(SaveData.getMetaSequence());
 	}
 }

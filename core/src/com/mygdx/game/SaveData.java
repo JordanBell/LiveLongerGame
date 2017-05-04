@@ -32,7 +32,7 @@ public class SaveData
 				case Rooms2:
 					return "level_market";
 				default:
-					throw new RuntimeException("Progress is not associated to a Rooms level.");
+					throw new RuntimeException("Progress is not associated to a Rooms level: " + this);
 			}
 		}
 	}
