@@ -158,7 +158,7 @@ Tom likes that.
 
 		<!-- Doors -->
 		<d id="door_keyroom" to="keyroom" node="1" pos="tl"/>
-		<d id="door_storeroom" lock="lock_storeroom" to="storeroom" node="0" pos="tr"/>
+		<d id="door_storeroom" lock="lock_storeroom" to="storeroom" lock="true" node="0" pos="tr"/>
 	</room>
 
 	<room id="keyroom" foreground="fg_keyroom.png">

@@ -15,11 +15,11 @@ public class SaveData
 		Rooms1_Heal,
 		Rooms1_Find,
 		Meta2,
-		Rooms2,
+		Rooms2_Market,
 		Meta3,
-		Rooms3,
+		Rooms3_Gem1,
 		Meta4,
-		Rooms4;
+		Rooms4_Gem2;
 		
 		public String getLevel()
 		{
@@ -29,8 +29,10 @@ public class SaveData
 					return "level_heal_her";
 				case Rooms1_Find:
 					return "level_find_him";
-				case Rooms2:
+				case Rooms2_Market:
 					return "level_market";
+				case Rooms4_Gem2:
+					return "level_gem2";
 				default:
 					throw new RuntimeException("Progress is not associated to a Rooms level: " + this);
 			}
@@ -144,9 +146,9 @@ public class SaveData
 
 			case Rooms1_Heal:
 			case Rooms1_Find:
-			case Rooms2:
-			case Rooms3:
-			case Rooms4:
+			case Rooms2_Market:
+			case Rooms3_Gem1:
+			case Rooms4_Gem2:
 				return 1;
 				
 			default: 

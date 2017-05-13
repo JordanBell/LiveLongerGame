@@ -35,6 +35,8 @@ public class LiveLongerGame implements ApplicationListener
 	GameState_Rooms m_pGameStateRooms = new GameState_Rooms();
 	GameState m_pCurrentState = null;
 	
+	private static int s_iFreezeCounter = 0;
+	
 	// Transition data
 	BlendTimer m_pTransitionAlpha;
 	
@@ -70,19 +72,23 @@ public class LiveLongerGame implements ApplicationListener
 		m_pShapeRenderer = new ShapeRenderer();
 		
 		// Set initial state based on save data
-		setState(SaveData.getStateIndex() == 0 ? m_pGameStateMeta : m_pGameStateRooms);
-		if(m_pCurrentState == m_pGameStateMeta) m_pGameStateMeta.start();
-		else									m_pGameStateRooms.start();
+//		setState(SaveData.getStateIndex() == 0 ? m_pGameStateMeta : m_pGameStateRooms);
+//		if(m_pCurrentState == m_pGameStateMeta) m_pGameStateMeta.start();
+//		else									m_pGameStateRooms.start();
 		
 		// Debug: Skip to a particular state
-		//setState(m_pGameStateRooms);
-		//m_pGameStateRooms.start(LevelLoader.getLevelByID("level_heal_her"));
-		//m_pGameStateRooms.start(LevelLoader.m_lpLevels.get(0));
-		//SaveData.m_eProgress = EProgress.Rooms1_Find;
+		setState(m_pGameStateRooms);
+		m_pGameStateRooms.start(LevelLoader.getLevelByID("level_gem2"));
+		SaveData.m_eProgress = EProgress.Rooms4_Gem2;
 
-		//setState(m_pGameStateMeta);
-		//m_pGameStateMeta.start();
-		//SaveData.m_eProgress = EProgress.Meta1;
+//		setState(m_pGameStateMeta);
+//		SaveData.m_eProgress = EProgress.Meta2;
+//		m_pGameStateMeta.start();
+	}
+	
+	public static void setCameraShake()
+	{
+		s_iFreezeCounter = 5;
 	}
 	
 	void onFadeOpaque()
@@ -125,13 +131,22 @@ public class LiveLongerGame implements ApplicationListener
 		// Apply and update camera
 		m_pViewport.apply();
 	    m_pCamera.position.set(m_pCamera.viewportWidth / 2, m_pCamera.viewportHeight / 2, 0);
-
-	    checkForStateTransitions();
-		m_pTransitionAlpha.update();
+	    
+		int iShakeX = s_iFreezeCounter > 0 ? (int)(Math.random() * 6) - 3 : 0;
+		int iShakeY = s_iFreezeCounter > 0 ? (int)(Math.random() * 6) - 3 : 0;
+	    m_pCamera.position.set(m_pCamera.viewportWidth / 2 + iShakeX, m_pCamera.viewportHeight / 2 + iShakeY, 0);
 	    
 	    // Update projection matrices after camera update
 	    m_pBatch.setProjectionMatrix(m_pCamera.combined);
 		m_pShapeRenderer.setProjectionMatrix(m_pCamera.combined);
+	    
+	    if(s_iFreezeCounter > 0)
+		{
+			s_iFreezeCounter--;
+		}
+
+	    checkForStateTransitions();
+		m_pTransitionAlpha.update();
 		
 		// Render the current state
 		{

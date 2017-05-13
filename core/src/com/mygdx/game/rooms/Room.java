@@ -105,12 +105,13 @@ public class Room
 				Door pDoor = new Door();
 				pDoor.m_sID = pChild.getAttribute("id");
 				pDoor.m_bIsEndOfLevel = pChild.getAttribute("end", "false").equals("true");
+				pDoor.m_sRequiredItem = pChild.getAttribute("item", null);
 				if(!pDoor.m_bIsEndOfLevel)
 				{
 					pDoor.m_sToIDRoom = pChild.getAttribute("to");
 					pDoor.m_sToIDNode = pChild.getAttribute("node");
 				}
-				pDoor.m_sLock = pChild.getAttribute("lock", null);
+				pDoor.m_bLock = pChild.getAttribute("lock", "false").equals("true");
 				pDoor.m_ePosition = Door.EPosition.fromString(pChild.getAttribute("pos"));
 				m_lpDoors.add(pDoor);
 			}
@@ -119,15 +120,20 @@ public class Room
 				NPC pNPC = new NPC(EType.fromString(pChild.getAttribute("type", "adult")), pChild.getIntAttribute("variant", -1));
 				
 				// Set position
-				final String sGridPosX = pChild.getAttribute("gridposx");
-				final String sGridPosY = pChild.getAttribute("gridposy");
-
-				final int iGridPosX = Integer.parseInt(sGridPosX);
-				final int iGridPosY = Integer.parseInt(sGridPosY);
-				
-				pNPC.m_vPosition = GridGuide.get7x7(iGridPosX, iGridPosY);
-				pNPC.m_vPosition.x += pChild.getIntAttribute("offsetX", 0);
-				pNPC.m_vPosition.y += pChild.getIntAttribute("offsetY", 0);
+				pNPC.m_sPlaceAtNode = pChild.getAttribute("node", null);
+				if(pNPC.m_sPlaceAtNode == null)
+				{
+					// Place in grid position
+					final String sGridPosX = pChild.getAttribute("gridposx");
+					final String sGridPosY = pChild.getAttribute("gridposy");
+					
+					final int iGridPosX = Integer.parseInt(sGridPosX);
+					final int iGridPosY = Integer.parseInt(sGridPosY);
+					
+					pNPC.m_vPosition = GridGuide.get7x7(iGridPosX, iGridPosY);
+					pNPC.m_vPosition.x += pChild.getIntAttribute("offsetX", 0);
+					pNPC.m_vPosition.y += pChild.getIntAttribute("offsetY", 0);
+				}
 				
 				final String sMsg = pChild.getAttribute("msg", "");
 				if(!sMsg.isEmpty())
@@ -189,10 +195,6 @@ public class Room
 				
 				m_lpNPCs.add(pNPC);
 			}
-			else if(sChildName.equals("melee")) // TODO Melee enemy
-			{
-				
-			}
 		}
 	}
 	
@@ -242,5 +244,14 @@ public class Room
 		
 		// Update NPC talk availability
 		updateNPCs(i_pPlayer);
+		
+		// Notify Items of proximity
+		for(Node pNode : m_pNodes.m_lpNodes)
+		{
+			if(pNode.m_pItem != null)
+			{
+				pNode.m_pItem.notifyOfProximity(pNode.m_vPos.dst(i_pPlayer.m_vPosition));
+			}
+		}
 	}
 }

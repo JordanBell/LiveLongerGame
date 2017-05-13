@@ -16,6 +16,7 @@ public class Crawler
 	// Transition data
 	Vector2 m_vPosition = new Vector2();
 	Node m_pToNode = null;
+	Node m_pLastNode = null;
 	static final float sk_fTransitionSpeed = 2.f;
 	
 	// Transitions between rooms
@@ -70,7 +71,13 @@ public class Crawler
 	}
 	
 	void goToDoor(Door i_pToDoor, NodeContainer i_pContainer)
-	{
+	{		
+		if(i_pToDoor.m_sRequiredItem != null)
+		{
+			// An item is required; abort if we do not have it
+			if(!SaveData.m_lsItems.contains(i_pToDoor.m_sRequiredItem)) return;
+		}
+		
 		if(i_pToDoor == null || i_pToDoor == m_pToDoor)
 		{
 			return;
@@ -100,7 +107,9 @@ public class Crawler
 			// Check if we've reached our destination
 			if(m_vPosition.dst(m_pToNode.m_vPos) <= 1.f)
 			{
+				// On reaching this destination...
 				m_pNode = m_pToNode;
+				m_pLastNode = m_pNode;
 				m_pToNode = null;
 				if(m_pNode.m_pItem != null)
 				{
@@ -118,7 +127,7 @@ public class Crawler
 		else if (m_pToDoor != null)
 		{
 			// Check if we've reached our destination
-			if(m_vPosition.dst(m_pToDoor.m_ePosition.toPositionCenter()) <= 1.f)
+			if(m_vPosition.dst(m_pToDoor.m_ePosition.toPositionBase()) <= 1.f)
 			{
 				m_bTransitionActive = true;
 			}
@@ -143,14 +152,36 @@ public class Crawler
 		}
 		else if(m_pToDoor != null)
 		{
-			if(Config.m_bTurbo)
+			if(m_pToDoor.m_bLock && !m_pToDoor.m_bUnlocked)
 			{
-				m_vPosition = m_pToDoor.m_ePosition.toPositionCenter();
+				// We're outside a locked door. If we have a key, unlock it. Otherwise, stop moving.
+				if(SaveData.m_lsItems.contains("key"))
+				{
+					// Remove the key
+					SaveData.m_lsItems.remove("key");
+					
+					// Unlock the door
+					m_pToDoor.m_bUnlocked = true;
+				}
+				else
+				{
+					// No key; stop moving
+					m_pToDoor = null;
+					m_pNode = m_pLastNode;
+				}
 			}
 			else
 			{
-				Vector2 vDirection = m_pToDoor.m_ePosition.toPositionCenter().sub(m_vPosition).nor();
-				m_vPosition.mulAdd(vDirection, Config.m_bTurbo ? sk_fTransitionSpeed * 10.f : sk_fTransitionSpeed);
+				// Door is not locked; approach it normally
+				if(Config.m_bTurbo)
+				{
+					m_vPosition = m_pToDoor.m_ePosition.toPositionBase();
+				}
+				else
+				{
+					Vector2 vDirection = m_pToDoor.m_ePosition.toPositionBase().sub(m_vPosition).nor();
+					m_vPosition.mulAdd(vDirection, Config.m_bTurbo ? sk_fTransitionSpeed * 10.f : sk_fTransitionSpeed);
+				}
 			}
 		}
 		else

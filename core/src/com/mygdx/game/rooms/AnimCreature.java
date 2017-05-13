@@ -41,6 +41,7 @@ public class AnimCreature extends Anim
 	void setState(EState i_eState)
 	{
 		if(m_eState == i_eState) return;
+		m_eState = i_eState;
 		
 		setAnimState(m_eState.ordinal());
 	}

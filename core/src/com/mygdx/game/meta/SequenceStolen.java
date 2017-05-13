@@ -2,6 +2,7 @@ package com.mygdx.game.meta;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.mygdx.game.InputButton;
+import com.mygdx.game.LiveLongerGame;
 import com.mygdx.game.Resources;
 import com.mygdx.game.SaveData;
 import com.mygdx.game.SaveData.EProgress;
@@ -344,10 +345,15 @@ public class SequenceStolen extends Sequence
 				if(m_eState.ordinal() < EState.values().length - 1)
 				{
 					m_eState = EState.values()[m_eState.ordinal() + 1];
+					if(m_eState == EState.KnockedOut)
+					{
+						// Camera shake
+						 LiveLongerGame.setCameraShake(); 
+					}
 				}
 				else
 				{
-					loadRooms(EProgress.Rooms2);
+					loadRooms(EProgress.Rooms2_Market);
 				}
 				break;
 
@@ -438,7 +444,7 @@ public class SequenceStolen extends Sequence
 			case Start_ChildTalk:	m_eState = EState.Start_ChildTalk_No; break; 
 			case QuestionChild:		m_eState = EState.Child_No; break;
 			case QuestionDeath:		m_eState = EState.SeenFriend_No; break;
-			case Man1:				m_eState = EState.Man1_Kill; break;
+			case Man1:				m_eState = EState.Man1_Kill; LiveLongerGame.setCameraShake(); break;
 			case HungrySelf:		m_eState = EState.HungrySelf_No; break;
 			case HungryChild:		m_eState = EState.HungryChild_No; break;
 			case ThirstySelf:		m_eState = EState.ThirstySelf_No; break;

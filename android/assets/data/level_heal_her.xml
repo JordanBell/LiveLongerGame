@@ -18,7 +18,7 @@ TODO:
 -->
 
 <level startRoom="room1" startNode="1">
-	<room id="room1">
+	<room id="room1" foreground="fg_hh1.png">
 		<n id="1" gridposx="3" gridposy="0">
 			<c>2</c>
 		</n>
@@ -34,23 +34,32 @@ TODO:
 		<d id="door" to="room2" node="1" pos="tm"/>
 	</room>
 
-	<room id="room2">
+	<room id="room2" foreground="fg_hh2.png">
 		<n id="1" gridposx="1" gridposy="0">
 			<c>door_down</c>
+			<c>1.5</c>
+		</n>
+		<n id="1.5" gridposx="1" gridposy="1">
+			<c>1</c>
 			<c>2</c>
 			<c lock="lock">4</c>
 		</n>
-		<n id="2" gridposx="5" gridposy="0">
-			<c>1</c>
+		<n id="2" gridposx="5" gridposy="1">
+			<c>1.5</c>
 			<c>3</c>
 		</n>
-		<n id="3" gridposx="5" gridposy="5">
+		<n id="3" gridposx="5" gridposy="6">
 			<c>2</c>
 			<k id="lock"/>
 		</n>
 
-		<n id="4" gridposx="1" gridposy="3">
+		<n id="4" gridposx="1" gridposy="4">
 			<c>1</c>
+			<c>5</c>
+		</n>
+
+		<n id="5" gridposx="1" gridposy="6">
+			<c>4</c>
 			<c>door_up</c>
 		</n>
 
@@ -58,32 +67,36 @@ TODO:
 		<d id="door_up" to="room3" node="1" pos="tl"/>
 	</room>
 
-	<room id="room3">
+	<room id="room3" foreground="fg_hh3.png">
 		<n id="1" gridposx="5" gridposy="0">
 			<c>door_down</c>
 			<c>2</c>
 		</n>
-		<n id="2" gridposx="5" gridposy="2">
+		<n id="2" gridposx="5" gridposy="1">
 			<c>3</c>
 			<c>1</c>
 			<c>npc_doctor</c>
 		</n>
-		<n id="3" gridposx="3" gridposy="2">
+		<n id="3" gridposx="3" gridposy="1">
 			<c>2</c>
-			<c>back_route_start</c>
+			<c>ad0</c>
 			<c>near_health</c>
 		</n>
-		<n id="near_health" gridposx="3" gridposy="5">
+		<n id="near_health" gridposx="3" gridposy="4">
 			<c>3</c>
-			<c>back_route_end</c>
+			<c>back_route_enemy</c>
 			<c>health</c>
 		</n>
 		<n id="health" gridposx="3" gridposy="6">
 			<c>near_health</c>
 			<medicine/>
 		</n>
-		<n id="back_route_start" gridposx="0" gridposy="2">
+		<n id="ad0" gridposx="2" gridposy="1">
 			<c>3</c>
+			<c>back_route_start</c>
+		</n>
+		<n id="back_route_start" gridposx="0" gridposy="2">
+			<c>ad0</c>
 			<c>back_route_end</c>
 		</n>
 		<n id="back_route_end" gridposx="0" gridposy="5">
@@ -91,7 +104,7 @@ TODO:
 			<c>back_route_start</c>
 			<c>weapon</c>
 		</n>
-		<n id="back_route_enemy" gridposx="2" gridposy="5">
+		<n id="back_route_enemy" gridposx="2" gridposy="4">
 			<c>near_health</c>
 			<c>back_route_end</c>
 		</n>
@@ -100,7 +113,7 @@ TODO:
 			<w/>
 		</n>
 
-		<npc id="npc_doctor" gridposx="5" gridposy="2" offsetY="8" msg="I am doctor. Medicine near. Be careful."/>	
+		<npc id="npc_doctor" gridposx="5" gridposy="1" offsetY="8" msg="I am doctor. Medicine near. Be careful."/>	
 		<melee id="melee" node="back_route_enemy" faces="east" covers="near_health"/>
 
 		<d id="door_down" to="room2" node="4" pos="br"/>

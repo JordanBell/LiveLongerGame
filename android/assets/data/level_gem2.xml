@@ -1,0 +1,323 @@
+<level startRoom="roomB" startNode="1">
+	<room id="roomAlpha" foreground="fg_gem2_Alpha.png">
+		<n id="1" gridposx="0" gridposy="3">
+			<c>door_left</c>
+			<c>2</c>
+		</n>
+		<n id="2" gridposx="1" gridposy="3">
+			<c>1</c>
+			<c>3</c>
+			<c>t3</c>
+		</n>
+		<n id="3" gridposx="3" gridposy="3">
+			<c>2</c>
+			<c>4</c>
+		</n>
+		<n id="4" gridposx="3" gridposy="0">
+			<c>3</c>
+			<c>5</c>
+		</n>
+		<n id="5" gridposx="1" gridposy="0">
+			<c>4</c>
+			<c>door_downl</c>
+		</n>
+		
+		<!-- Right -->
+		<n id="r1" gridposx="5" gridposy="0">
+			<c>r2</c>
+			<c>door_downr</c>
+		</n>
+		<n id="r2" gridposx="5" gridposy="3">
+			<c>r1</c>
+			<c>r3</c>
+		</n>
+		<n id="r3" gridposx="5" gridposy="6">
+			<c>r3</c>
+			<c>door_upr</c>
+		</n>
+		
+		<!-- Top -->
+		<n id="AlphaC" gridposx="3" gridposy="6">
+			<c>door_upl</c>
+			<c>t1</c>
+		</n>
+		<n id="t1" gridposx="3" gridposy="5">
+			<c>AlphaC</c>
+			<c>t2</c>
+		</n>
+		<n id="t2" gridposx="1" gridposy="5">
+			<c>t1</c>
+			<c>t3</c>
+		</n>
+		<n id="t3" gridposx="1" gridposy="4">
+			<c>t2</c>
+			<c>2</c>
+		</n>
+		
+		<n id="AlphaB" gridposx="5" gridposy="5">
+			<c>door_right</c>
+			<c>2</c>
+		</n>
+		
+		<npc type="creature" node="t3" facing="south" msg="Dormant creature. Gem in chest. Too old to throb."/>
+		
+		<d id="door_left" pos="lm" end="true" item="gem"/>
+		<d id="door_upl" to="roomC" node="13" pos="tm"/>
+		<d id="door_upr" to="roomB" node="1" pos="tr"/>
+		<d id="door_downl" to="roomA" node="1" pos="bl"/>
+		<d id="door_downr" to="roomA" node="end" pos="br"/>
+	</room>
+
+	<room id="roomA" foreground="fg_gem2_A.png">
+		<n id="1" gridposx="1" gridposy="6">
+			<c>door_topl</c>
+			<c>l1</c>
+			<c>1l</c>
+			<c>2</c>
+		</n>
+		<n id="1l" gridposx="0" gridposy="6">
+			<c>1</c>
+		</n>
+		<n id="2" gridposx="3" gridposy="6">
+			<c>1</c>
+			<c>end</c>
+			<c rope="true">behind_enemy</c>
+		</n>
+		<n id="end" gridposx="5" gridposy="6">
+			<c>2</c>
+			<c>r1</c>
+			<c>door_topr</c>
+		</n>
+		
+		<!-- Left side -->
+		<n id="behind_enemy" gridposx="3" gridposy="4">
+			<c>lr</c>
+			<c rope="true">2</c>
+		</n>
+		<n id="lr" gridposx="2" gridposy="4">
+			<c>behind_enemy</c>
+			<c>l1</c>
+		</n>
+		<n id="l1" gridposx="1" gridposy="4">
+			<c>1</c>
+			<c>lr</c>
+			<c>l2</c>
+		</n>
+		<n id="l2" gridposx="1" gridposy="1">
+			<c>l1</c>
+			<k/>
+		</n>
+		
+		<!-- Right Side -->
+		<n id="r1" gridposx="5" gridposy="4">
+			<c>end</c>
+			<c>rr</c>
+			<c>rl1</c>
+			<c>r2</c>
+		</n>
+		<n id="r2" gridposx="5" gridposy="2">
+			<c>rl2</c>
+			<c>r1</c>
+			<c>r3</c>
+		</n>
+		<n id="r3" gridposx="5" gridposy="0">
+			<c>r2</c>
+			<c>r4</c>
+		</n>
+		<n id="r4" gridposx="3" gridposy="0">
+			<c>r3</c>
+			<rope/>
+		</n>
+		
+		<n id="rr" gridposx="6" gridposy="4">
+			<c>r1</c>
+		</n>
+		
+		<n id="rl1" gridposx="4" gridposy="4">
+			<c>r1</c>
+			<c>rl2</c>
+			<w/>
+		</n>
+		<n id="rl2" gridposx="4" gridposy="2">
+			<c>rl1</c>
+			<c>r2</c>
+		</n>
+		
+		<npc type="creature" node="1l" facing="east" msg="Dormant creature. It is old. Its heart does not throb."/>
+		<npc type="creature" node="rr" facing="west" msg="Dormant creature. Looks scared. Its gem is still."/>
+		
+		<d id="door_topl" to="roomAlpha" node="5" pos="tl"/>
+		<d id="door_topr" to="roomAlpha" node="r1" pos="tr" lock="true"/>
+	</room>
+
+	<room id="roomB" foreground="fg_gem2_B.png">
+		<n id="1" gridposx="1" gridposy="0">
+			<c>door_down</c>
+			<c>2</c>
+		</n>
+		<n id="2" gridposx="3" gridposy="0">
+			<c>1</c>
+			<c>side1</c>
+			<c>tbase</c>
+		</n>
+		
+		<!-- Up side -->
+		<n id="tu1" gridposx="3" gridposy="5">
+			<c>tbase</c>
+			<c>tu2</c>
+		</n>
+		<n id="tu2" gridposx="4" gridposy="5">
+			<c>tu1</c>
+			<c>tu3</c>
+			<c>tr2</c>
+		</n>
+		<n id="tu3" gridposx="5" gridposy="5">
+			<c>tu2</c>
+			<c>tr3</c>
+			<rope/>
+		</n>
+		
+		<!-- Right side -->
+		<n id="tbase" gridposx="3" gridposy="3">
+			<c>2</c>
+			<c>tl1</c>
+			<c>tu1</c>
+			<c>tr2</c>
+			<gem/>
+		</n>
+		<n id="tr2" gridposx="4" gridposy="3">
+			<c>tbase</c>
+			<c>tr3</c>
+			<c>tu2</c>
+		</n>
+		<n id="tr3" gridposx="5" gridposy="3">
+			<c>tr2</c>
+			<c>tu3</c>
+			<c>tr4</c>
+		</n>
+		<n id="tr4" gridposx="6" gridposy="3">
+			<c>tr3</c>
+			<c>upper1</c>
+		</n>
+		
+		<!-- Upper Platform -->
+		<n id="upper1" gridposx="6" gridposy="6">
+			<c>tr4</c>
+			<c>upper2</c>
+		</n>
+		<n id="upper2" gridposx="5" gridposy="6">
+			<c>upper1</c>
+			<c rope="true">upper3</c>
+		</n>
+		<n id="upper3" gridposx="2" gridposy="6">
+			<c rope="true">upper2</c>
+			<c>upper4</c>
+		</n>
+		<n id="upper4" gridposx="2" gridposy="5">
+			<c>upper3</c>
+			<c>tl1</c>
+		</n>
+		
+		<!-- Left side -->
+		<n id="tl1" gridposx="2" gridposy="3">
+			<c>tbase</c>
+			<c>tl2</c>
+			<c>upper4</c>
+		</n>
+		<n id="tl2" gridposx="0" gridposy="3">
+			<c>tl1</c>
+			<c>tl3</c>
+		</n>
+		<n id="tl3" gridposx="0" gridposy="5">
+			<c>tl2</c>
+			<c>door_left</c>
+		</n>
+		
+		<!-- Side passage to first weapon -->
+		<n id="side1" gridposx="6" gridposy="0">
+			<c>2</c>
+			<c>side2</c>
+		</n>
+		<n id="side2" gridposx="6" gridposy="1">
+			<c>side1</c>
+			<w/>
+		</n>
+		
+		<npc type="creature" node="upper4" facing="south" msg=""/>
+		<npc type="creature" node="tu2" facing="south" msg=""/>
+		
+		<d id="door_left" to="roomC" node="1" pos="lt"/>
+		<d id="door_down" to="roomAlpha" node="AlphaB" pos="bl"/>
+	</room>
+
+	<room id="roomC" foreground="fg_gem2_C.png">
+		<n id="1" gridposx="6" gridposy="5">
+			<c>door_right</c>
+			<c>2</c>
+		</n>
+		<n id="2" gridposx="4" gridposy="5">
+			<c>1</c>
+			<c>3</c>
+		</n>
+		<n id="3" gridposx="4" gridposy="4">
+			<c>2</c>
+			<c>4</c>
+		</n>
+		<n id="4" gridposx="2" gridposy="4">
+			<c>3</c>
+			<c>5</c>
+		</n>
+		<n id="5" gridposx="2" gridposy="6">
+			<c>4</c>
+			<c>6</c>
+		</n>
+		<n id="6" gridposx="0" gridposy="6">
+			<c>5</c>
+			<c>7</c>
+		</n>
+		<n id="7" gridposx="0" gridposy="2">
+			<c>6</c>
+			<c>8</c>
+		</n>
+		<n id="8" gridposx="1" gridposy="2">
+			<c>7</c>
+			<c>9</c>
+		</n>
+		<n id="9" gridposx="1" gridposy="1">
+			<c>8</c>
+			<c>10</c>
+		</n>
+		<n id="10" gridposx="3" gridposy="1">
+			<c>9</c>
+			<c>11</c>
+		</n>
+		<n id="11" gridposx="3" gridposy="2">
+			<c>10</c>
+			<c>12</c>
+		</n>
+		<n id="12" gridposx="5" gridposy="2">
+			<c>11</c>
+			<c>13</c>
+			<w/>
+		</n>
+		<n id="13" gridposx="5" gridposy="0">
+			<c>12</c>
+			<c>door_down</c>
+		</n>
+
+		<npc type="ghost" id="npcghost" gridposx="6" gridposy="6" offsetX="0" offsetY="-8" msg="Should not."/>	
+		<npc type="ghost" id="npcghost" gridposx="3" gridposy="5" offsetX="12" offsetY="0" msg="Should not."/>	
+		<npc type="ghost" id="npcghost" gridposx="1" gridposy="4" offsetX="12" offsetY="0" msg="Should not."/>	
+		<npc type="ghost" id="npcghost" gridposx="1" gridposy="5" offsetX="-12" offsetY="12" msg="Should not."/>	
+		<npc type="ghost" id="npcghost" gridposx="0" gridposy="1" offsetX="0" offsetY="0" msg="Should not."/>	
+		<npc type="ghost" id="npcghost" gridposx="1" gridposy="0" offsetX="0" offsetY="0" msg="Should not."/>	
+		<npc type="ghost" id="npcghost" gridposx="2" gridposy="2" offsetX="-12" offsetY="0" msg="Should not."/>	
+		<npc type="ghost" id="npcghost" gridposx="4" gridposy="0" offsetX="12" offsetY="0" msg="Should not."/>	
+		<npc type="ghost" id="npcghost" gridposx="4" gridposy="1" offsetX="-12" offsetY="0" msg="Should not."/>	
+		<npc type="ghost" id="npcghost" gridposx="6" gridposy="0" offsetX="-12" offsetY="0" msg="Should not."/>	
+		<npc type="ghost" id="npcghost" gridposx="6" gridposy="2" offsetX="-12" offsetY="0" msg="Should not."/>	
+
+		<d id="door_right" to="roomB" node="tl3" pos="rt"/>
+		<d id="door_down" to="roomAlpha" node="AlphaC" pos="br"/>
+	</room>
+</level>

@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.XmlReader;
 import com.mygdx.game.Resources;
 import com.mygdx.game.SaveData;
 import com.mygdx.game.SpriteSheetGDX;
+import com.mygdx.game.rooms.NPC.EType;
 
 class DialogueOption
 {
@@ -119,6 +120,9 @@ public class NPC
 		Child,
 		Ghost,
 		Chest,
+		Creature,
+		Infant,
+		Melee,
 		
 		Error;
 		
@@ -140,6 +144,18 @@ public class NPC
 			{
 				return Chest;
 			}
+			else if(i_s.equalsIgnoreCase("creature"))
+			{
+				return Creature;
+			}
+			else if(i_s.equalsIgnoreCase("infant"))
+			{
+				return Infant;
+			}
+			else if(i_s.equalsIgnoreCase("melee"))
+			{
+				return Melee;
+			}
 			
 			return Error;
 		}
@@ -157,6 +173,7 @@ public class NPC
 	int m_iColorType = -1;
 	
 	int m_iDialogueIndex = 0;
+	public String m_sPlaceAtNode;
 	
 	public NPC(EType i_eType, int i_iColorType)
 	{
@@ -206,10 +223,49 @@ public class NPC
 			{
 				return new AnimGhost();
 			}
+			case Creature:
+			{
+				return new AnimCreature();
+			}
 			case Error:
 				throw new RuntimeException("Type error.");
 			default:
-				throw new RuntimeException("Unknown type.");
+				throw new RuntimeException("Unknown type. Graphics for " + i_eType + " not implemented or hooked up.");
+		}
+	}
+	
+	public boolean isAttackCapable()
+	{
+		return m_eType == EType.Creature || m_eType == EType.Melee;
+	}
+	
+	public void attack(Crawler i_pTarget, NodeContainer i_pContainer)
+	{
+		if(!isAttackCapable()) return; // Do not attack if uncapable
+		
+		// TODO Move to target
+		//goToNode(i_pTarget.m_pNode, i_pContainer);
+		
+		// Handle animation
+		switch(m_eType)
+		{
+			case Creature: 
+			{
+				AnimCreature pAsCreature = (AnimCreature)m_pGraphics;
+				pAsCreature.setState(AnimCreature.EState.Running);
+			}
+			break;
+			default: throw new RuntimeException("Unrecognised enemy type; must add anim attack update for enemy type: " + m_eType);
+		}
+	}
+	
+	public void onGemGrab()
+	{
+		// Only creatures react
+		if(m_eType == EType.Creature)
+		{
+			AnimCreature pAsCreature = (AnimCreature)m_pGraphics;
+			pAsCreature.setState(AnimCreature.EState.Idle);
 		}
 	}
 	
@@ -344,9 +400,13 @@ public class NPC
 		{
 			 return Resources.m_pChatheadNPCGhost.getRegion(0);
 		}
+		else if(m_eType == EType.Creature)
+		{
+			 return Resources.m_pChatheadNPCCreature.getRegion(0);
+		}
 		else
 		{
-			return null;
+			throw new RuntimeException("No chathead available for NPC type: " + m_eType);
 		}
 	}
 }

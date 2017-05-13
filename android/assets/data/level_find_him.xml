@@ -118,6 +118,6 @@ TODO:
 		<melee id="melee" node="r3" faces="west" covers="5"/>
 
 		<d id="door_up" to="room2" node="5" pos="tm"/>
-		<d id="door_left" pos="lb" end="true"/>
+		<d id="door_left" pos="lb" lock="true" end="true"/>
 	</room>
 </level>

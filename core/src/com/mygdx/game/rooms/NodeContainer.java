@@ -80,11 +80,7 @@ public class NodeContainer
 			// Draw connections through doors
 			for(Door pDoor : pNode.m_lpNeighborDoors)
 			{
-				Vector2 vDoorPos = pDoor.m_ePosition.toPosition().cpy();
-				Texture pDoorTexture = Resources.getDoor(pDoor.m_ePosition); 
-				vDoorPos.x += pDoorTexture.getWidth() / 2;  // Adjust for w & h
-				vDoorPos.y += pDoorTexture.getHeight() / 2;
-				i_pShapeRenderer.rectLine(pNode.m_vPos, vDoorPos, 2.f);		
+				i_pShapeRenderer.rectLine(pNode.m_vPos, pDoor.m_ePosition.toPositionBase(), 2.f);		
 			}
 			
 			// Flip flag for render drawing

@@ -30,7 +30,8 @@ class Item
 		EType_Weapon,
 		EType_Vial,
 		EType_Rope,
-		EType_Medicine;
+		EType_Medicine,
+		EType_Gem;
 		
 		@Override
 		public String toString()
@@ -42,6 +43,7 @@ class Item
 				case EType_Vial: return "vial";
 				case EType_Rope: return "rope";	
 				case EType_Medicine: return "medicine";	
+				case EType_Gem: return "gem";	
 				default: throw new RuntimeException("All item types must convert to string.");
 			}
 		}
@@ -63,6 +65,24 @@ class Item
 		TextureRegion pReg = m_pAnim.getCurrentRegion();
 		int iHW = pReg.getRegionWidth() / 2;	// Half width
 		m_pAnim.draw(i_pBatch, i_iX - iHW, i_iY + 2);
+	}
+
+	public void notifyOfProximity(float i_fDistance)
+	{
+		if(m_eType == EType.EType_Gem)
+		{
+			// Throb faster when close
+			if(i_fDistance < 64.f)
+			{
+				m_pAnim.m_fSpeedFactor = 5.f * (1.f - (i_fDistance / 64.f));
+				if(m_pAnim.m_pCurrentFrame != null) m_pAnim.m_pCurrentFrame.m_iOffsetY = -1;
+			}
+			else
+			{
+				m_pAnim.m_fSpeedFactor = 1.f;
+				if(m_pAnim.m_pCurrentFrame != null) m_pAnim.m_pCurrentFrame.m_iOffsetY = 0;
+			}
+		}
 	}
 }
 
@@ -117,6 +137,10 @@ public class Node
 			else if(sChildName.equals("medicine")) // Ends the level in level_heal_her
 			{
 				m_pItem = new Item(Item.EType.EType_Medicine);
+			}
+			else if(sChildName.equals("gem"))
+			{
+				m_pItem = new Item(Item.EType.EType_Gem);
 			}
 		}
 	}

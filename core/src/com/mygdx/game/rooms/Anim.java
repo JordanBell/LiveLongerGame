@@ -43,6 +43,8 @@ class Anim extends GraphicsComponent
 	ArrayList<ArrayList<Frame>> m_pAnimStates = new ArrayList<ArrayList<Frame>>();
 	int m_iAnimState = 0;
 	
+	float m_fSpeedFactor = 1.f;
+	
 	Frame m_pCurrentFrame = null;
 	
 	void setAsPingPong(SpriteSheetGDX i_pSpriteSheet, final float i_fFrameTime)
@@ -105,7 +107,7 @@ class Anim extends GraphicsComponent
 		}
 		
 		// Update the anim index
-		m_fTimer += Gdx.graphics.getDeltaTime();
+		m_fTimer += Gdx.graphics.getDeltaTime() * m_fSpeedFactor;
 		
 		float fAcc = 0.f;
 		m_pCurrentFrame = null;

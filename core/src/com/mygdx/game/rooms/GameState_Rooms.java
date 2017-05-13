@@ -72,6 +72,7 @@ public class GameState_Rooms extends GameState
 			LevelLoader.parseFile("data/level_find_him.xml");
 			LevelLoader.parseFile("data/level_heal_her.xml");
 			LevelLoader.parseFile("data/level_market.xml");
+			LevelLoader.parseFile("data/level_gem2.xml");
 		} 
 		catch (IOException e)
 		{
@@ -195,6 +196,17 @@ public class GameState_Rooms extends GameState
 			{
 				// End the level; start Meta 2
 				loadMeta(EProgress.Meta2);
+			}
+			else if(sItemName.equals("gem"))
+			{
+				// Notify all NPCs of an acquired gem
+				for(Room pRoom : m_pCurrentLevel.m_lpRooms)
+				{
+					for(NPC pNPC : pRoom.m_lpNPCs)
+					{
+						pNPC.onGemGrab();
+					}
+				}
 			}
 			else
 			{

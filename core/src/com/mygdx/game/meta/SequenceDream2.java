@@ -160,7 +160,7 @@ public class SequenceDream2 extends Sequence
 				break;
 
 			case s6:
-				loadRooms(EProgress.Rooms2);
+				loadRooms(EProgress.Rooms2_Market);
 				break;
 
 			// Yes/No

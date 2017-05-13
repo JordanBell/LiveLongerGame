@@ -35,6 +35,5 @@ public class AnimGhost extends Anim
 		// Set the changing alpha value
 		float fFadeFactor = ((float)Math.sin((float)m_iUpdateCounter / (float)sk_iFadeSpeed) + 1.f) / 2.f;
 		m_pCurrentFrame.m_fAlpha = 0.1f + fFadeFactor * 0.2f + (float)Math.random() * 0.06f;
-		//m_pCurrentFrame.m_fAlpha = fFadeFactor;
 	}
 }

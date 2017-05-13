@@ -2,6 +2,7 @@ package com.mygdx.game.rooms;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.Resources;
 
@@ -123,6 +124,53 @@ public class Door
 			r_vPos.y += pTexture.getHeight() * 0.5f;
 			return r_vPos;
 		}
+		
+		Vector2 toPositionBase()
+		{
+			Vector2 r_vPos = toPosition();
+			Texture pTexture = Resources.getDoor(this);
+			
+			// Y Adjustment
+			switch(this)
+			{
+				case RT:
+				case RM:
+				case RB:
+				case LT:
+				case LM:
+				case LB: 
+					r_vPos.y += pTexture.getHeight() * 0.25f;
+					break;
+				default: break;
+			}
+			
+			// X Adjustment
+			switch(this)
+			{
+				case TM:
+				case BM:
+					r_vPos.x += pTexture.getWidth() * 0.5f;
+					break;
+				case TL:
+				case BL:
+					r_vPos.x += pTexture.getWidth() * 0.5f;
+					//r_vPos.x += 4; 
+					break;
+				case TR:
+				case BR:
+					r_vPos.x += pTexture.getWidth() * 0.5f;
+					r_vPos.x -= 4; 
+					break;
+				case LT:
+				case LM:
+				case LB:
+					r_vPos.x += pTexture.getWidth();
+					break;
+				default: break;
+			}
+			
+			return r_vPos;
+		}
 	}
 
 	Room m_pToRoom;
@@ -132,18 +180,42 @@ public class Door
 	String m_sID;
 	String m_sToIDRoom;
 	String m_sToIDNode;
-	String m_sLock;
+	String m_sRequiredItem = null;
 	boolean m_bIsEndOfLevel = false;
+	boolean m_bLock;
 	boolean m_bUnlocked = false;
+	
+	boolean isPositionLockSupported()
+	{
+		return m_ePosition == EPosition.TR
+			|| m_ePosition == EPosition.LB;
+	}
 	
 	void draw(SpriteBatch i_pBatch)
 	{
 		Vector2 vPos = m_ePosition.toPosition();
-		i_pBatch.draw(Resources.getDoor(m_ePosition), vPos.x, vPos.y);
-		
-		if(!m_bUnlocked && m_sLock != null)
+		TextureRegion pRegion;
+		if(!m_bUnlocked && m_bLock)
 		{
-			// TODO Render lock
+			// Render lock
+			pRegion = new TextureRegion(Resources.getDoor(m_ePosition));
+			if(!isPositionLockSupported())
+			{
+				throw new RuntimeException("Unsupported door for that lock. Add graphic to it.");
+			}
+			
+			pRegion.setRegion(0, pRegion.getRegionHeight() / 2, pRegion.getRegionWidth(), pRegion.getRegionHeight() / 2);
 		}
+		else
+		{
+			// Render normally
+			pRegion = new TextureRegion(Resources.getDoor(m_ePosition));
+			if(isPositionLockSupported())
+			{
+				// Set region as second half; the locked half
+				pRegion.setRegion(0, 0, pRegion.getRegionWidth(), pRegion.getRegionHeight() / 2);
+			}
+		}
+		i_pBatch.draw(pRegion, vPos.x, vPos.y);
 	}
 }

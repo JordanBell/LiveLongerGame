@@ -52,4 +52,14 @@ public class SpriteSheetGDX
 	{
 		return m_aRegions[i_iX][i_iY];
 	}
+	
+	public int getRows()
+	{
+		return m_iRows;
+	}
+	
+	public int getColumns()
+	{
+		return m_iColumns;
+	}
 }

@@ -89,6 +89,22 @@ public class Level
 				}
 			}
 			
+			for(NPC pNPC : pRoom.m_lpNPCs)
+			{
+				if(pNPC.m_sPlaceAtNode != null)
+				{
+					// Place at the node by that name
+					Node pAtNode = pRoom.m_pNodes.getNodeByID(pNPC.m_sPlaceAtNode);
+					
+					if(pAtNode == null)
+					{
+						throw new RuntimeException("Failed to find a node named " + pNPC.m_sPlaceAtNode + " to place an NPC.");
+					}
+					
+					pNPC.m_vPosition = pAtNode.m_vPos.cpy();
+				}
+			}
+			
 			// TODO: Go through melee and connect them to where they watch
 		}
 	}
